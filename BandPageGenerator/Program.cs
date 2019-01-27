@@ -31,7 +31,7 @@ namespace BandPageGenerator
 
             logger.LogInformation(renderTask.Result);
 
-            var fbTask = serviceProvider.GetService<FacebookGraph>().GetPageLikeCount();
+            var fbTask = serviceProvider.GetService<FacebookGraph>().GetPageLikeCountAsync();
             fbTask.Wait();
             logger.LogInformation("Count: " + fbTask.Result);
 

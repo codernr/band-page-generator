@@ -26,17 +26,26 @@ namespace BandPageGenerator.Services
             };
         }
 
-        public async Task<int> GetPageLikeCount()
+        public async Task<int> GetPageLikeCountAsync()
         {
-            JToken data = await this.GetGraphData(this.config.PageId, "fan_count");
+            JToken data = await this.GetGraphDataAsync(
+                this.config.PageId, new[] { "fan_count" });
 
             return data["fan_count"].Value<int>();
         }
 
-        private async Task<JToken> GetGraphData(string edge, params string[] fields)
+        private async Task<JToken> GetGraphDataAsync(string edge, string[] fields, Tuple<string, string>[] filters = null)
         {
-            var response = await this.client.GetStringAsync(
-                $"{edge}?fields={string.Join(",", fields)}&access_token={this.config.AccessToken}");
+            var queryString = $"{edge}?fields={string.Join(",", fields)}&access_token={this.config.AccessToken}";
+
+            if (filters != null)
+            {
+                var filterString = string.Join("", filters.Select(i => $"&{i.Item1}={i.Item2}"));
+
+                queryString += filterString;
+            }
+
+            var response = await this.client.GetStringAsync(queryString);
 
             return JToken.Parse(response);
         }
