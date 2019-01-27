@@ -39,7 +39,8 @@ namespace BandPageGenerator
             var serviceCollection = new ServiceCollection()
                 .AddLogging(logging => logging.AddConsole())
                 .AddSingleton<IAsyncStubbleRenderer>(new StubbleBuilder().Build())
-                .AddSingleton<IViewRenderer, StubbleViewRenderer>();
+                .AddSingleton<IViewRenderer, StubbleViewRenderer>()
+                .AddSingleton<FacebookGraph>();
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

@@ -9,5 +9,7 @@
         public string PageId { get; set; }
 
         public string AlbumId { get; set; }
+
+        public string AccessToken => $"{this.AppId}|{this.AppSecret}";
     }
 }
