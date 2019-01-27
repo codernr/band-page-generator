@@ -1,5 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BandPageGenerator.Services;
+using BandPageGenerator.Services.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Stubble.Core.Builders;
+using Stubble.Core.Interfaces;
 
 namespace BandPageGenerator
 {
@@ -9,6 +13,8 @@ namespace BandPageGenerator
         {
             var serviceProvider = new ServiceCollection()
                 .AddLogging(logging => logging.AddConsole())
+                .AddSingleton<IAsyncStubbleRenderer>(new StubbleBuilder().Build())
+                .AddSingleton<IViewRenderer, StubbleViewRenderer>()
                 .BuildServiceProvider();
         }
     }
