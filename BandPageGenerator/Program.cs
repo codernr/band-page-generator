@@ -1,4 +1,5 @@
-﻿using BandPageGenerator.Services;
+﻿using BandPageGenerator.Config;
+using BandPageGenerator.Services;
 using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,6 +40,13 @@ namespace BandPageGenerator
                 .AddLogging(logging => logging.AddConsole())
                 .AddSingleton<IAsyncStubbleRenderer>(new StubbleBuilder().Build())
                 .AddSingleton<IViewRenderer, StubbleViewRenderer>();
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false)
+                .Build();
+            serviceCollection.AddOptions();
+            serviceCollection.Configure<Facebook>(configuration.GetSection("Facebook"));
 
             return serviceCollection;
         }
