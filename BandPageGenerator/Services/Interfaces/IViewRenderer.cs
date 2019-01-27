@@ -1,7 +1,9 @@
-﻿namespace BandPageGenerator.Services.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace BandPageGenerator.Services.Interfaces
 {
     public interface IViewRenderer
     {
-        string RenderView<TModel>(string viewName, TModel model);
+        Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model);
     }
 }
