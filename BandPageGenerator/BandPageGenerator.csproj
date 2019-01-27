@@ -11,4 +11,10 @@
     <PackageReference Include="Stubble.Compilation" Version="1.2.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Templates\index.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
