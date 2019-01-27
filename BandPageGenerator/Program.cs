@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace BandPageGenerator
 {
@@ -6,7 +7,9 @@ namespace BandPageGenerator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var serviceProvider = new ServiceCollection()
+                .AddLogging(logging => logging.AddConsole())
+                .BuildServiceProvider();
         }
     }
 }
