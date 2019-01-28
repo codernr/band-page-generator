@@ -88,7 +88,7 @@ namespace BandPageGenerator.Models
 
         public int Width { get; set; }
 
-        public int Source { get; set; }
+        public string Source { get; set; }
     }
 
     public class FacebookListModel<TModel>
