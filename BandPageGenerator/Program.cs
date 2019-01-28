@@ -59,6 +59,7 @@ namespace BandPageGenerator
                 .Build();
             serviceCollection.AddOptions();
             serviceCollection.Configure<Facebook>(configuration.GetSection("Facebook"));
+            serviceCollection.Configure<Youtube>(configuration.GetSection("Youtube"));
 
             serviceCollection.AddSingleton<FacebookGraph>();
 
