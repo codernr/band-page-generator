@@ -16,14 +16,11 @@ namespace BandPageGenerator.Services
         private readonly ILogger logger;
         private readonly HttpClient client;
 
-        public FacebookGraph(IOptions<Facebook> config, ILoggerFactory loggerFactory)
+        public FacebookGraph(IOptions<Facebook> config, ILoggerFactory loggerFactory, HttpClient client)
         {
             this.config = config.Value;
             this.logger = loggerFactory.CreateLogger<FacebookGraph>();
-            this.client = new HttpClient
-            {
-                BaseAddress = new Uri($"https://graph.facebook.com/{this.config.ApiVersion}/")
-            };
+            this.client = client;
         }
 
         public async Task<int> GetPageLikeCountAsync()

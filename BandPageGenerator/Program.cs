@@ -43,8 +43,7 @@ namespace BandPageGenerator
             var serviceCollection = new ServiceCollection()
                 .AddLogging(logging => logging.AddConsole())
                 .AddSingleton<IAsyncStubbleRenderer>(new StubbleBuilder().Build())
-                .AddSingleton<IViewRenderer, StubbleViewRenderer>()
-                .AddSingleton<FacebookGraph>();
+                .AddSingleton<IViewRenderer, StubbleViewRenderer>();
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -52,6 +51,11 @@ namespace BandPageGenerator
                 .Build();
             serviceCollection.AddOptions();
             serviceCollection.Configure<Facebook>(configuration.GetSection("Facebook"));
+
+            serviceCollection.AddHttpClient<FacebookGraph>(client =>
+            {
+                client.BaseAddress = new Uri($"https://graph.facebook.com/{configuration.Get<Facebook>().ApiVersion}/");
+            });
 
             return serviceCollection;
         }
