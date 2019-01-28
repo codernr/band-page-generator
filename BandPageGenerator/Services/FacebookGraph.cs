@@ -15,13 +15,11 @@ namespace BandPageGenerator.Services
     public class FacebookGraph
     {
         private readonly Facebook config;
-        private readonly ILogger logger;
         private readonly IFormattedHttpClient client;
 
-        public FacebookGraph(IOptions<Facebook> config, ILoggerFactory loggerFactory, IFormattedHttpClient client)
+        public FacebookGraph(IOptions<Facebook> config, IFormattedHttpClient client)
         {
             this.config = config.Value;
-            this.logger = loggerFactory.CreateLogger<FacebookGraph>();
             this.client = client;
         }
 
