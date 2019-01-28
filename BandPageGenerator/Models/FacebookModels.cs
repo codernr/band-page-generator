@@ -2,6 +2,11 @@
 
 namespace BandPageGenerator.Models
 {
+    public class FacebookFanCountModel
+    {
+        public int FanCount { get; set; }
+    }
+
     /// <summary>
     /// Event model: https://developers.facebook.com/docs/graph-api/reference/event/
     /// </summary>

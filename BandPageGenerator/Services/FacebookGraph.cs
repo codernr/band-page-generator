@@ -1,4 +1,6 @@
 ﻿using BandPageGenerator.Config;
+using BandPageGenerator.Models;
+using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -14,9 +16,9 @@ namespace BandPageGenerator.Services
     {
         private readonly Facebook config;
         private readonly ILogger logger;
-        private readonly HttpClient client;
+        private readonly IFormattedHttpClient client;
 
-        public FacebookGraph(IOptions<Facebook> config, ILoggerFactory loggerFactory, HttpClient client)
+        public FacebookGraph(IOptions<Facebook> config, ILoggerFactory loggerFactory, IFormattedHttpClient client)
         {
             this.config = config.Value;
             this.logger = loggerFactory.CreateLogger<FacebookGraph>();
@@ -25,15 +27,16 @@ namespace BandPageGenerator.Services
 
         public async Task<int> GetPageLikeCountAsync()
         {
-            JToken data = await this.GetGraphDataAsync(
+            var data = await this.GetGraphDataAsync<FacebookFanCountModel>(
                 this.config.PageId, new[] { "fan_count" });
 
-            return data["fan_count"].Value<int>();
+            return data.FanCount;
         }
 
-        private async Task<JToken> GetGraphDataAsync(string edge, string[] fields, Tuple<string, string>[] filters = null)
+        private Task<TModel> GetGraphDataAsync<TModel>(string edge, string[] fields, Tuple<string, string>[] filters = null)
         {
-            var queryString = $"{edge}?fields={string.Join(",", fields)}&access_token={this.config.AccessToken}";
+            var queryString = string.Format("https://graph.facebook.com/{0}/{1}?fields={2}&access_token={3}",
+                this.config.ApiVersion, edge, string.Join(",", fields), this.config.AccessToken);
 
             if (filters != null)
             {
@@ -42,9 +45,7 @@ namespace BandPageGenerator.Services
                 queryString += filterString;
             }
 
-            var response = await this.client.GetStringAsync(queryString);
-
-            return JToken.Parse(response);
+            return this.client.GetAsync<TModel>(queryString);
         }
     }
 }

@@ -4,6 +4,8 @@ using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Stubble.Core.Builders;
 using Stubble.Core.Interfaces;
 using System;
@@ -43,7 +45,13 @@ namespace BandPageGenerator
             var serviceCollection = new ServiceCollection()
                 .AddLogging(logging => logging.AddConsole())
                 .AddSingleton<IAsyncStubbleRenderer>(new StubbleBuilder().Build())
-                .AddSingleton<IViewRenderer, StubbleViewRenderer>();
+                .AddSingleton<IViewRenderer, StubbleViewRenderer>()
+                .AddSingleton(new JsonSerializer
+                {
+                    ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() }
+                });
+
+            serviceCollection.AddHttpClient<IFormattedHttpClient, JsonHttpClient>();
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -52,10 +60,7 @@ namespace BandPageGenerator
             serviceCollection.AddOptions();
             serviceCollection.Configure<Facebook>(configuration.GetSection("Facebook"));
 
-            serviceCollection.AddHttpClient<FacebookGraph>(client =>
-            {
-                client.BaseAddress = new Uri($"https://graph.facebook.com/{configuration.Get<Facebook>().ApiVersion}/");
-            });
+            serviceCollection.AddSingleton<FacebookGraph>();
 
             return serviceCollection;
         }
