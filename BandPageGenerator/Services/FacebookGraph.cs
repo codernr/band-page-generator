@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -31,15 +32,25 @@ namespace BandPageGenerator.Services
             return data.FanCount;
         }
 
-        // TODO: returns only first page of data
-        public async Task<FacebookEventModel[]> GetPageEventsAsync()
+        public async Task<List<FacebookEventModel>> GetPageEventsAsync()
         {
+            var dataList = new List<FacebookEventModel>();
+
             var data = await this.GetGraphDataAsync<FacebookListModel<FacebookEventModel>>(
                 $"{this.config.PageId}/events",
                 new[] { "cover", "category", "description", "end_time", "name", "start_time", "ticket_uri" },
                 new[] { ("event_state_filter", "[\"published\"]") });
 
-            return data.Data;
+            dataList.AddRange(data.Data);
+
+            while (!string.IsNullOrEmpty(data.Paging?.Next))
+            {
+                data = await this.client.GetAsync<FacebookListModel<FacebookEventModel>>(data.Paging.Next);
+
+                dataList.AddRange(data.Data);
+            }
+
+            return dataList;
         }
 
         private Task<TModel> GetGraphDataAsync<TModel>(string edge, string[] fields, (string, string)[] filters = null)
