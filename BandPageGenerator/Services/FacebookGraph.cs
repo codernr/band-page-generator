@@ -32,20 +32,36 @@ namespace BandPageGenerator.Services
             return data.FanCount;
         }
 
-        public async Task<List<FacebookEventModel>> GetPageEventsAsync()
+        public Task<List<FacebookEventModel>> GetPageEventsAsync()
         {
-            var dataList = new List<FacebookEventModel>();
-
-            var data = await this.GetGraphDataAsync<FacebookListModel<FacebookEventModel>>(
+            return this.GetPagedGraphDataAsync<FacebookEventModel>(
                 $"{this.config.PageId}/events",
                 new[] { "cover", "category", "description", "end_time", "name", "start_time", "ticket_uri" },
                 new[] { ("event_state_filter", "[\"published\"]") });
+        }
+
+        /// <summary>
+        /// Gets the photos from the featured album with the biggest resolution
+        /// </summary>
+        public async Task<List<FacebookPhotoModel>> GetFeaturedPhotosAsync()
+        {
+            var photos = await this.GetPagedGraphDataAsync<FacebookAlbumPhotosModel>(
+                $"{this.config.AlbumId}/photos", new[] { "images", "link" });
+
+            return photos.Select(p => p.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2)).ToList();
+        }
+
+        private async Task<List<TModel>> GetPagedGraphDataAsync<TModel>(string edge, string[] fields, (string, string)[] filters = null)
+        {
+            var dataList = new List<TModel>();
+
+            var data = await this.GetGraphDataAsync<FacebookListModel<TModel>>(edge, fields, filters);
 
             dataList.AddRange(data.Data);
 
             while (!string.IsNullOrEmpty(data.Paging?.Next))
             {
-                data = await this.client.GetAsync<FacebookListModel<FacebookEventModel>>(data.Paging.Next);
+                data = await this.client.GetAsync<FacebookListModel<TModel>>(data.Paging.Next);
 
                 dataList.AddRange(data.Data);
             }

@@ -42,6 +42,35 @@ namespace Tests
         }
 
         [Fact]
+        public async void ShouldSelectBiggestImages()
+        {
+            var client = this.CreateClient(new FacebookListModel<FacebookAlbumPhotosModel>
+            {
+                Data = new[]
+                {
+                    new FacebookAlbumPhotosModel
+                    {
+                        Images = new[] { new FacebookPhotoModel { Height = 1 }, new FacebookPhotoModel { Height = 2 } }
+                    },
+                    new FacebookAlbumPhotosModel
+                    {
+                        Images = new[] { new FacebookPhotoModel { Height = 3 }, new FacebookPhotoModel { Height = 4 } }
+                    }
+                }
+            });
+
+            var options = this.CreateOptions(new Facebook());
+
+            var graph = new FacebookGraph(options.Object, client.Object);
+
+            var photos = await graph.GetFeaturedPhotosAsync();
+
+            Assert.Equal(2, photos.Count);
+            Assert.Equal(2, photos[0].Height);
+            Assert.Equal(4, photos[1].Height);
+        }
+
+        [Fact]
         public async void ShouldReturnAllPagesOfData()
         {
             var client = new Mock<IFormattedHttpClient>();

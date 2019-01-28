@@ -77,6 +77,20 @@ namespace BandPageGenerator.Models
         public string Zip { get; set; }
     }
 
+    public class FacebookAlbumPhotosModel
+    {
+        public FacebookPhotoModel[] Images { get; set; }
+    }
+
+    public class FacebookPhotoModel
+    {
+        public int Height { get; set; }
+
+        public int Width { get; set; }
+
+        public int Source { get; set; }
+    }
+
     public class FacebookListModel<TModel>
     {
         public TModel[] Data { get; set; }
