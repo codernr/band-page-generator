@@ -45,13 +45,10 @@ namespace BandPageGenerator
             var serviceCollection = new ServiceCollection()
                 .AddLogging(logging => logging.AddConsole())
                 .AddSingleton<IAsyncStubbleRenderer>(new StubbleBuilder().Build())
-                .AddSingleton<IViewRenderer, StubbleViewRenderer>()
-                .AddSingleton(new JsonSerializer
-                {
-                    ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() }
-                });
+                .AddSingleton<IViewRenderer, StubbleViewRenderer>();
 
-            serviceCollection.AddHttpClient<IFormattedHttpClient, JsonHttpClient>();
+            serviceCollection.AddHttpClient<IJsonHttpClient<SnakeCaseNamingStrategy>, JsonHttpClient<SnakeCaseNamingStrategy>>();
+            serviceCollection.AddHttpClient<IJsonHttpClient<CamelCaseNamingStrategy>, JsonHttpClient<CamelCaseNamingStrategy>>();
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

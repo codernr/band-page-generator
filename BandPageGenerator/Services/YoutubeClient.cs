@@ -2,6 +2,7 @@
 using BandPageGenerator.Models;
 using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace BandPageGenerator.Services
         private readonly IFormattedHttpClient client;
         private const string apiUri = "https://www.googleapis.com/youtube/v3/";
 
-        public YoutubeClient(IOptions<Youtube> config, IFormattedHttpClient client)
+        public YoutubeClient(IOptions<Youtube> config, IJsonHttpClient<CamelCaseNamingStrategy> client)
         {
             this.config = config.Value;
             this.client = client;

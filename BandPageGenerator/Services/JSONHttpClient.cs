@@ -1,20 +1,24 @@
 ﻿using BandPageGenerator.Services.Interfaces;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
 {
-    public class JsonHttpClient : IFormattedHttpClient
+    public class JsonHttpClient<TNamingStrategy> : IJsonHttpClient<TNamingStrategy> where TNamingStrategy : NamingStrategy, new()
     {
         private readonly HttpClient client;
         private readonly JsonSerializer serializer;
 
-        public JsonHttpClient(HttpClient client, JsonSerializer serializer)
+        public JsonHttpClient(HttpClient client)
         {
             this.client = client;
-            this.serializer = serializer;
+            this.serializer = new JsonSerializer
+            {
+                ContractResolver = new DefaultContractResolver { NamingStrategy = new TNamingStrategy() }
+            };
         }
 
         public async Task<TModel> GetAsync<TModel>(string requestUri)

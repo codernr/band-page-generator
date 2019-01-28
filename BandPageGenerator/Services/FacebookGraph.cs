@@ -1,14 +1,10 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
 using BandPageGenerator.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
@@ -18,7 +14,7 @@ namespace BandPageGenerator.Services
         private readonly Facebook config;
         private readonly IFormattedHttpClient client;
 
-        public FacebookGraph(IOptions<Facebook> config, IFormattedHttpClient client)
+        public FacebookGraph(IOptions<Facebook> config, IJsonHttpClient<SnakeCaseNamingStrategy> client)
         {
             this.config = config.Value;
             this.client = client;
