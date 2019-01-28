@@ -31,7 +31,18 @@ namespace BandPageGenerator.Services
             return data.FanCount;
         }
 
-        private Task<TModel> GetGraphDataAsync<TModel>(string edge, string[] fields, Tuple<string, string>[] filters = null)
+        // TODO: returns only first page of data
+        public async Task<FacebookEventModel[]> GetPageEventsAsync()
+        {
+            var data = await this.GetGraphDataAsync<FacebookListModel<FacebookEventModel>>(
+                $"{this.config.PageId}/events",
+                new[] { "cover", "category", "description", "end_time", "name", "start_time", "ticket_uri" },
+                new[] { ("event_state_filter", "[\"published\"]") });
+
+            return data.Data;
+        }
+
+        private Task<TModel> GetGraphDataAsync<TModel>(string edge, string[] fields, (string, string)[] filters = null)
         {
             var queryString = string.Format("https://graph.facebook.com/{0}/{1}?fields={2}&access_token={3}",
                 this.config.ApiVersion, edge, string.Join(",", fields), this.config.AccessToken);

@@ -14,8 +14,6 @@ namespace BandPageGenerator.Models
     {
         public string Id { get; set; }
 
-        public int AttendingCount { get; set; }
-
         public string Category { get; set; }
 
         public FacebookCoverPhotoModel Cover { get; set; }
@@ -25,6 +23,10 @@ namespace BandPageGenerator.Models
         public DateTime EndTime { get; set; }
 
         public string Name { get; set; }
+
+        public DateTime StartTime { get; set; }
+
+        public string TicketUri { get; set; }
     }
 
     /// <summary>
@@ -73,5 +75,19 @@ namespace BandPageGenerator.Models
         public string Street { get; set; }
 
         public string Zip { get; set; }
+    }
+
+    public class FacebookListModel<TModel>
+    {
+        public TModel[] Data { get; set; }
+
+        public FacebookPagingModel Paging { get; set; }
+    }
+
+    public class FacebookPagingModel
+    {
+        public string Next { get; set; }
+
+        public string Previous { get; set; }
     }
 }
