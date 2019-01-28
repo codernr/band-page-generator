@@ -23,7 +23,7 @@ namespace BandPageGenerator.Services
         public async Task<long> GetCumulatedViewCount()
         {
             var channelViewData = await this.GetApiDataAsync<YoutubeDataWrapperModel<YoutubeDataModel>>(
-                "channel", ("part", "statistics"), ("id", this.config.ChannelId));
+                "channels", ("part", "statistics"), ("id", this.config.ChannelId));
 
             long viewCount = channelViewData.Items[0].Statistics.ViewCount;
 
