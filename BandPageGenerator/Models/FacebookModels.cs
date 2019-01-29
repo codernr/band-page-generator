@@ -104,4 +104,19 @@ namespace BandPageGenerator.Models
 
         public string Previous { get; set; }
     }
+
+    public class FacebookInstagramMediaModel
+    {
+        public string MediaType { get; set; }
+
+        public string MediaUrl { get; set; }
+
+        public string Caption { get; set; }
+
+        public string Permalink { get; set; }
+
+        public DateTime Timestamp { get; set; }
+
+        public string Id { get; set; }
+    }
 }

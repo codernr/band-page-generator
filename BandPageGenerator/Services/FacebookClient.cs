@@ -47,6 +47,19 @@ namespace BandPageGenerator.Services
             return photos.Select(p => p.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2)).ToList();
         }
 
+        public async Task<FacebookInstagramMediaModel[]> GetRecentInstagramPhotosAsync()
+        {
+            var media = await this.GetGraphDataAsync<FacebookListModel<FacebookInstagramMediaModel>>(
+                $"{this.config.InstagramId}/media", new[] { "media_type", "media_url", "caption", "permalink", "timestamp" });
+
+            var images = media.Data.Where(m => m.MediaType == "IMAGE");
+
+            if (this.config.FilterHashtags != null && this.config.FilterHashtags.Length > 0)
+                images = images.Where(i => this.config.FilterHashtags.Any(filter => i.Caption.Contains(filter)));
+
+            return images.ToArray();
+        }
+
         private async Task<List<TModel>> GetPagedGraphDataAsync<TModel>(string edge, string[] fields, (string, string)[] filters = null)
         {
             var dataList = new List<TModel>();
