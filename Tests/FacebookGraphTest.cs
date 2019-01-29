@@ -4,6 +4,7 @@ using BandPageGenerator.Services;
 using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Moq;
+using Newtonsoft.Json.Serialization;
 using Xunit;
 
 namespace Tests
@@ -73,7 +74,7 @@ namespace Tests
         [Fact]
         public async void ShouldReturnAllPagesOfData()
         {
-            var client = new Mock<IFormattedHttpClient>();
+            var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
             client.Setup(c => c.GetAsync<FacebookListModel<FacebookEventModel>>(It.IsNotIn("nextPage")))
                 .ReturnsAsync(new FacebookListModel<FacebookEventModel>
                 {
@@ -95,9 +96,9 @@ namespace Tests
             Assert.Equal(3, response.Count);
         }
 
-        private Mock<IFormattedHttpClient> CreateClient<TModel>(TModel returnValue)
+        private Mock<IJsonHttpClient<SnakeCaseNamingStrategy>> CreateClient<TModel>(TModel returnValue)
         {
-            var client = new Mock<IFormattedHttpClient>();
+            var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
             client.Setup(c => c.GetAsync<TModel>(It.IsAny<string>()))
                 .ReturnsAsync(returnValue);
             return client;
