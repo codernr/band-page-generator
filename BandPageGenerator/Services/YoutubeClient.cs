@@ -38,6 +38,14 @@ namespace BandPageGenerator.Services
             return viewCount;
         }
 
+        public async Task<YoutubeVideoModel[]> GetFeaturedVideos()
+        {
+            var data = await this.GetApiDataAsync<YoutubeDataWrapperModel<YoutubeSnippetModel>>(
+                "playlistItems", ("maxResults", "50"), ("playlistId", this.config.FeaturedPlaylistId));
+
+            return data.Items.Select(i => new YoutubeVideoModel(i)).ToArray();
+        }
+
         private Task<TModel> GetApiDataAsync<TModel>(string edge, params (string, string)[] parameters)
         {
             var queryString = string.Format("{0}{1}?key={2}{3}",

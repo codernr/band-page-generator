@@ -53,4 +53,29 @@ namespace BandPageGenerator.Models
     {
         public string VideoId { get; set; }
     }
+
+    /// <summary>
+    /// Flattened model from API return values
+    /// </summary>
+    public class YoutubeVideoModel
+    {
+        public string Id { get; }
+
+        public DateTime PublishedAt { get; }
+
+        public string Title { get; }
+
+        public string Description { get; }
+
+        public YoutubeThumbnailModel Thumbnail { get; }
+
+        public YoutubeVideoModel(YoutubeSnippetModel snippet)
+        {
+            this.Id = snippet.Snippet.ResourceId.VideoId;
+            this.PublishedAt = snippet.Snippet.PublishedAt;
+            this.Title = snippet.Snippet.Title;
+            this.Description = snippet.Snippet.Description;
+            this.Thumbnail = snippet.Snippet.Thumbnails.Maxres;
+        }
+    }
 }
