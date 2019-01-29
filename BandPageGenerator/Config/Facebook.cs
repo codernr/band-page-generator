@@ -4,6 +4,10 @@
     {
         public string PageId { get; set; }
 
+        public string InstagramId { get; set; }
+
+        public string[] FilterHashtags { get; set; }
+
         public string AlbumId { get; set; }
 
         public string ApiVersion { get; set; }
