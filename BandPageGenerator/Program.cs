@@ -33,7 +33,7 @@ namespace BandPageGenerator
 
             logger.LogInformation(renderTask.Result);
 
-            var fbTask = serviceProvider.GetService<FacebookGraph>().GetPageLikeCountAsync();
+            var fbTask = serviceProvider.GetService<FacebookClient>().GetPageLikeCountAsync();
             fbTask.Wait();
             logger.LogInformation("Count: " + fbTask.Result);
 
@@ -59,7 +59,7 @@ namespace BandPageGenerator
             serviceCollection.Configure<Youtube>(configuration.GetSection("Youtube"));
 
             serviceCollection
-                .AddSingleton<FacebookGraph>()
+                .AddSingleton<FacebookClient>()
                 .AddSingleton<YoutubeClient>();
 
             return serviceCollection;

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Tests
 {
-    public class FacebookGraphTest
+    public class FacebookClientTest
     {
         [Fact]
         public async void ShouldNotThrow()
@@ -18,7 +18,7 @@ namespace Tests
 
             var options = this.CreateOptions(new Facebook());
 
-            var graph = new FacebookGraph(options.Object, client.Object);
+            var graph = new FacebookClient(options.Object, client.Object);
 
             var value = await graph.GetPageLikeCountAsync();
 
@@ -35,7 +35,7 @@ namespace Tests
 
             var options = this.CreateOptions(new Facebook());
 
-            var graph = new FacebookGraph(options.Object, client.Object);
+            var graph = new FacebookClient(options.Object, client.Object);
 
             var response = await graph.GetPageEventsAsync();
 
@@ -62,7 +62,7 @@ namespace Tests
 
             var options = this.CreateOptions(new Facebook());
 
-            var graph = new FacebookGraph(options.Object, client.Object);
+            var graph = new FacebookClient(options.Object, client.Object);
 
             var photos = await graph.GetFeaturedPhotosAsync();
 
@@ -89,7 +89,7 @@ namespace Tests
 
             var options = this.CreateOptions(new Facebook());
 
-            var graph = new FacebookGraph(options.Object, client.Object);
+            var graph = new FacebookClient(options.Object, client.Object);
 
             var response = await graph.GetPageEventsAsync();
 
