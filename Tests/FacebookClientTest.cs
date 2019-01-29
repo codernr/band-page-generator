@@ -113,6 +113,29 @@ namespace Tests
             Assert.Single(response);
         }
 
+        [Fact]
+        public async void ShouldFilterInstagramImageHashtags()
+        {
+            var client = this.CreateClient(new FacebookListModel<FacebookInstagramMediaModel>
+            {
+                Data = new[] {
+                new FacebookInstagramMediaModel { MediaType = "IMAGE", Caption = "no hashtag" },
+                new FacebookInstagramMediaModel { MediaType = "VIDEO", Caption = "#hashtag1 but in video" },
+                new FacebookInstagramMediaModel { MediaType = "IMAGE", Caption = "#hashtag2 in image" },
+                new FacebookInstagramMediaModel { MediaType = "IMAGE", Caption = "#notdefined hashtag in image" }
+            }
+            });
+
+            var options = this.CreateOptions(new Facebook { FilterHashtags = new[] { "#hashtag1", "#hashtag2" } });
+
+            var facebookClient = new FacebookClient(options.Object, client.Object);
+
+            var response = await facebookClient.GetRecentInstagramPhotosAsync();
+
+            Assert.Single(response);
+            Assert.Contains("#hashtag2", response[0].Caption);
+        }
+
         private Mock<IJsonHttpClient<SnakeCaseNamingStrategy>> CreateClient<TModel>(TModel returnValue)
         {
             var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
