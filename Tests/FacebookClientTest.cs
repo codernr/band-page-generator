@@ -96,6 +96,23 @@ namespace Tests
             Assert.Equal(3, response.Count);
         }
 
+        [Fact]
+        public async void ShouldFilterInstagramImages()
+        {
+            var client = this.CreateClient(new FacebookListModel<FacebookInstagramMediaModel> { Data = new[] {
+                new FacebookInstagramMediaModel { MediaType = "IMAGE" },
+                new FacebookInstagramMediaModel { MediaType = "VIDEO" }
+            }});
+
+            var options = this.CreateOptions(new Facebook());
+
+            var facebookClient = new FacebookClient(options.Object, client.Object);
+
+            var response = await facebookClient.GetRecentInstagramPhotosAsync();
+
+            Assert.Single(response);
+        }
+
         private Mock<IJsonHttpClient<SnakeCaseNamingStrategy>> CreateClient<TModel>(TModel returnValue)
         {
             var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
