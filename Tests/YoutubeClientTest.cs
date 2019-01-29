@@ -13,6 +13,30 @@ namespace Tests
     public class YoutubeClientTest
     {
         [Fact]
+        public async void ShouldReturnNumber()
+        {
+            var client = new Mock<IJsonHttpClient<CamelCaseNamingStrategy>>();
+
+            client.Setup(c => c.GetAsync<YoutubeDataWrapperModel<YoutubeDataModel>>(It.IsAny<string>()))
+                .ReturnsAsync(new YoutubeDataWrapperModel<YoutubeDataModel>
+                {
+                    Items = new[]
+                {
+                    new YoutubeDataModel { Statistics = new YoutubeStatisticsModel { ViewCount = 2 }}
+                }
+                });
+
+            var options = new Mock<IOptions<Youtube>>();
+            options.Setup(o => o.Value).Returns(new Youtube());
+
+            var youtubeClient = new YoutubeClient(options.Object, client.Object);
+
+            var data = await youtubeClient.GetCumulatedViewCount();
+
+            Assert.Equal(2, data);
+        }
+
+        [Fact]
         public async void ShouldTranslateToFlattenedItemCorrectly()
         {
             var client = new Mock<IJsonHttpClient<CamelCaseNamingStrategy>>();
