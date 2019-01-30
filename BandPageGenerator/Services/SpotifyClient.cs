@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,18 @@ namespace BandPageGenerator.Services
             this.client = client;
         }
 
+        public async Task<SpotifyAlbumModel[]> GetAlbumsAsync()
+        {
+            var simpleAlbumsData = await this.GetPagedApiDataAsync<SpotifySimplifiedAlbumModel>(
+                $"artists/{this.config.ArtistId}/albums", ("include_groups", "album,single"));
+
+            var albumTasks = simpleAlbumsData.Select(d => this.GetAuthorizedUriAsync<SpotifyAlbumModel>(d.Href));
+
+            await Task.WhenAll(albumTasks);
+
+            return albumTasks.Select(t => t.Result).ToArray();
+        }
+
         private async Task<SpotifyClientCredentialsModel> GetCredentialsAsync()
         {
             if (this.credentials != null) return this.credentials;
@@ -43,13 +56,32 @@ namespace BandPageGenerator.Services
             return this.credentials;
         }
 
-        private async Task<TModel> GetApiDataAsync<TModel>(string edge, params (string, string)[] parameters)
+        private async Task<TModel[]> GetPagedApiDataAsync<TModel>(string edge, params (string, string)[] parameters)
+        {
+            var pagedData = await this.GetApiDataAsync<SpotifyPagingModel<TModel>>(edge, parameters);
+
+            return pagedData.Items;
+        }
+
+        private Task<TModel> GetApiDataAsync<TModel>(string edge, params (string, string)[] parameters)
+        {
+            var requestUri = apiUri + edge;
+
+            if (parameters.Length > 0)
+            {
+                requestUri += "?" + string.Join("&", parameters.Select(p => $"{p.Item1}={p.Item2}"));
+            }
+
+            return this.GetAuthorizedUriAsync<TModel>(requestUri);
+        }
+
+        private async Task<TModel> GetAuthorizedUriAsync<TModel>(string requestUri)
         {
             var credentials = await this.GetCredentialsAsync();
 
             var headers = new[] { ("Authorization", $"Bearer {credentials.AccessToken}") };
 
-            return await this.client.GetAsync<TModel>(apiUri + edge, headers);
+            return await this.client.GetAsync<TModel>(requestUri, headers);
         }
     }
 }
