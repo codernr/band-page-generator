@@ -25,7 +25,7 @@ namespace BandPageGenerator.Services
             this.client = client;
         }
 
-        private async Task<SpotifyClientCredentialsModel> GetCredentials()
+        private async Task<SpotifyClientCredentialsModel> GetCredentialsAsync()
         {
             if (this.credentials != null) return this.credentials;
 
