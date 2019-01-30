@@ -23,7 +23,19 @@ namespace BandPageGenerator.Services
 
         public async Task<TModel> GetAsync<TModel>(string requestUri)
         {
-            using (Stream s = await this.client.GetStreamAsync(requestUri))
+            return await this.DeserializeAsync<TModel>(
+                await this.client.GetAsync(requestUri));
+        }
+
+        public async Task<TResponse> PostAsync<TResponse>(string requestUri, HttpContent content)
+        {
+            return await this.DeserializeAsync<TResponse>(
+                await this.client.PostAsync(requestUri, content));
+        }
+
+        private async Task<TModel> DeserializeAsync<TModel>(HttpResponseMessage responseTask)
+        {
+            using (Stream s = await responseTask.Content.ReadAsStreamAsync())
             using (StreamReader sr = new StreamReader(s))
             using (JsonReader reader = new JsonTextReader(sr))
             {
