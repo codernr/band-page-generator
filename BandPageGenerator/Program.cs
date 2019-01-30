@@ -57,6 +57,7 @@ namespace BandPageGenerator
             serviceCollection.AddOptions();
             serviceCollection.Configure<Facebook>(configuration.GetSection("Facebook"));
             serviceCollection.Configure<Youtube>(configuration.GetSection("Youtube"));
+            serviceCollection.Configure<Spotify>(configuration.GetSection("Spotify"));
 
             serviceCollection
                 .AddSingleton<FacebookClient>()
