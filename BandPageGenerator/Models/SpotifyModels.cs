@@ -46,7 +46,7 @@
 
         public int Height { get; set; }
 
-        public int Url { get; set; }
+        public string Url { get; set; }
     }
 
     public class SpotifyTrackModel

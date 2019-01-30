@@ -61,7 +61,8 @@ namespace BandPageGenerator
 
             serviceCollection
                 .AddSingleton<FacebookClient>()
-                .AddSingleton<YoutubeClient>();
+                .AddSingleton<YoutubeClient>()
+                .AddSingleton<SpotifyClient>();
 
             return serviceCollection;
         }
