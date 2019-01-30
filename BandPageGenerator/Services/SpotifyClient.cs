@@ -37,9 +37,8 @@ namespace BandPageGenerator.Services
             var key = Convert.ToBase64String(
                 Encoding.UTF8.GetBytes($"{this.config.ClientId}:{this.config.ClientSecret}"));
 
-            content.Headers.Add("Authorization", $"Basic {key}");
-
-            this.credentials = await this.client.PostAsync<SpotifyClientCredentialsModel>(authUri, content);
+            this.credentials = await this.client.PostAsync<SpotifyClientCredentialsModel>(
+                authUri, content, new[] { ("Authorization", $"Basic {key}") });
 
             return this.credentials;
         }
