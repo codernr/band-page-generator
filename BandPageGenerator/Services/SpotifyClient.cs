@@ -42,5 +42,14 @@ namespace BandPageGenerator.Services
 
             return this.credentials;
         }
+
+        private async Task<TModel> GetApiDataAsync<TModel>(string edge, params (string, string)[] parameters)
+        {
+            var credentials = await this.GetCredentialsAsync();
+
+            var headers = new[] { ("Authorization", $"Bearer {credentials.AccessToken}") };
+
+            return await this.client.GetAsync<TModel>(apiUri + edge, headers);
+        }
     }
 }
