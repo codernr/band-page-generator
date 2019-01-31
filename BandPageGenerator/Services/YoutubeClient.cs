@@ -41,7 +41,7 @@ namespace BandPageGenerator.Services
         public async Task<YoutubeVideoModel[]> GetFeaturedVideos()
         {
             var data = await this.GetApiDataAsync<YoutubeDataWrapperModel<YoutubeSnippetModel>>(
-                "playlistItems", ("maxResults", "50"), ("playlistId", this.config.FeaturedPlaylistId));
+                "playlistItems", ("maxResults", "50"), ("playlistId", this.config.FeaturedPlaylistId), ("part", "snippet"));
 
             return data.Items.Select(i => new YoutubeVideoModel(i)).ToArray();
         }
