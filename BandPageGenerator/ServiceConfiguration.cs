@@ -15,14 +15,6 @@ namespace BandPageGenerator
 {
     public static class ServiceConfiguration
     {
-        private static readonly Dictionary<string, Action<IServiceCollection, IConfigurationRoot>> modules =
-            new Dictionary<string, Action<IServiceCollection, IConfigurationRoot>>
-            {
-                { "Facebook", ConfigureFacebook },
-                { "Youtube", ConfigureYoutube },
-                { "Spotify", ConfigureSpotify }
-            };
-
         public static IServiceProvider ConfigureServiceProvider()
         {
             var serviceCollection = new ServiceCollection()
@@ -39,27 +31,27 @@ namespace BandPageGenerator
                 .Build();
             serviceCollection.AddOptions();
 
-            foreach (var section in configuration.GetChildren()) modules[section.Key](serviceCollection, configuration);
+            AddProviderServices<Facebook, FacebookClient, FacebookTemplateDataTransformer>(
+                "Facebook", configuration, serviceCollection);
+            AddProviderServices<Youtube, YoutubeClient, YoutubeTemplateDataTransformer>(
+                "Youtube", configuration, serviceCollection);
+            AddProviderServices<Spotify, SpotifyClient, SpotifyTemplateDataTransformer>(
+                "Spotify", configuration, serviceCollection);
 
             return serviceCollection.BuildServiceProvider();
         }
 
-        private static void ConfigureFacebook(IServiceCollection serviceCollection, IConfigurationRoot configuration)
+        private static void AddProviderServices<TConfig, TClient, TTemplateDataTransformer>
+            (string key, IConfigurationRoot configuration, IServiceCollection collection)
+            where TConfig : class where TClient : class where TTemplateDataTransformer : class, ITemplateDataTransformer
         {
-            serviceCollection.Configure<Facebook>(configuration.GetSection("Facebook"));
-            serviceCollection.AddSingleton<FacebookClient>();
-        }
+            var section = configuration.GetSection(key);
 
-        private static void ConfigureYoutube(IServiceCollection serviceCollection, IConfigurationRoot configuration)
-        {
-            serviceCollection.Configure<Youtube>(configuration.GetSection("Youtube"));
-            serviceCollection.AddSingleton<YoutubeClient>();
-        }
+            if (section == null) return;
 
-        private static void ConfigureSpotify(IServiceCollection serviceCollection, IConfigurationRoot configuration)
-        {
-            serviceCollection.Configure<Spotify>(configuration.GetSection("Spotify"));
-            serviceCollection.AddSingleton<SpotifyClient>();
+            collection.Configure<TConfig>(section);
+            collection.AddSingleton<TClient>();
+            collection.AddSingleton<ITemplateDataTransformer, TTemplateDataTransformer>();
         }
     }
 }
