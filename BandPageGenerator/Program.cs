@@ -3,7 +3,9 @@ using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace BandPageGenerator
 {
@@ -15,23 +17,34 @@ namespace BandPageGenerator
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
-            var renderer = serviceProvider.GetService<IViewRenderer>();
+            if (args.Length == 0)
+            {
+                logger.LogError("No output file path provided, exiting");
+                Environment.Exit(-1);
+            }
 
-            var model = new { Name = "Anybody" };
+            var outputPath = args[0];
 
-            var renderTask = renderer.RenderViewToStringAsync<object>(
+            logger.LogInformation("Rendering to file: " + outputPath);
+
+            RenderToFileAsync(
+                serviceProvider,
                 Path.Combine(Directory.GetCurrentDirectory(), "Templates/index.html"),
-                model);
-
-            renderTask.Wait();
-
-            logger.LogInformation(renderTask.Result);
-
-            var fbTask = serviceProvider.GetService<FacebookClient>().GetPageLikeCountAsync();
-            fbTask.Wait();
-            logger.LogInformation("Count: " + fbTask.Result);
+                args[0]).Wait();
 
             Console.ReadKey();
+        }
+
+        static async Task RenderToFileAsync(IServiceProvider serviceProvider, string templatePath, string outputPath)
+        {
+            var renderer = serviceProvider.GetService<IViewRenderer>();
+
+            var templateData = new Dictionary<string, object>();
+
+            foreach (var clientService in serviceProvider.GetServices<ITemplateDataTransformer>())
+                await clientService.AddTemplateDataAsync(templateData);
+
+            await File.WriteAllTextAsync(outputPath, await renderer.RenderViewToStringAsync(templatePath, templateData));
         }
     }
 }

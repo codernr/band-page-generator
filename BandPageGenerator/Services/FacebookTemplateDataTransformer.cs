@@ -10,13 +10,15 @@ namespace BandPageGenerator.Services
 
         public FacebookTemplateDataTransformer(FacebookClient client) => this.client = client;
 
-        public async Task AddTemplateData(Dictionary<string, object> templateData)
+        public async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
         {
             // TODO: conditionally add instagram data
 
             templateData.Add("Likes", await this.client.GetPageLikeCountAsync());
             templateData.Add("Events", await this.client.GetPageEventsAsync());
             templateData.Add("FeaturedPhotos", await this.client.GetFeaturedPhotosAsync());
+            templateData.Add("InstagramPhotos", await this.client.GetRecentInstagramPhotosAsync());
+            System.Console.WriteLine("addtemplate");
         }
     }
 }

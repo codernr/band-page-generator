@@ -5,6 +5,6 @@ namespace BandPageGenerator.Services.Interfaces
 {
     public interface ITemplateDataTransformer
     {
-        Task AddTemplateData(Dictionary<string, object> templateData);
+        Task AddTemplateDataAsync(Dictionary<string, object> templateData);
     }
 }

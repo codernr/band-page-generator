@@ -10,7 +10,7 @@ namespace BandPageGenerator.Services
 
         public SpotifyTemplateDataTransformer(SpotifyClient client) => this.client = client;
 
-        public async Task AddTemplateData(Dictionary<string, object> templateData)
+        public async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
         {
             templateData.Add("Albums", await this.client.GetAlbumsAsync());
         }

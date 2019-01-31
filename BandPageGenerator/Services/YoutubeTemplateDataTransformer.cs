@@ -10,7 +10,7 @@ namespace BandPageGenerator.Services
 
         public YoutubeTemplateDataTransformer(YoutubeClient client) => this.client = client;
 
-        public async Task AddTemplateData(Dictionary<string, object> templateData)
+        public async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
         {
             templateData.Add("ViewCount", await this.client.GetCumulatedViewCount());
             templateData.Add("Videos", await this.client.GetFeaturedVideos());
