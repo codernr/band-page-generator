@@ -47,7 +47,7 @@ namespace BandPageGenerator
         {
             var section = configuration.GetSection(key);
 
-            if (section == null) return;
+            if (section.Value == null) return;
 
             collection.Configure<TConfig>(section);
             collection.AddSingleton<TClient>();
