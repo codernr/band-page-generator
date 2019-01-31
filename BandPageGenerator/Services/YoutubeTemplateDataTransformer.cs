@@ -12,11 +12,8 @@ namespace BandPageGenerator.Services
 
         public async Task AddTemplateData(Dictionary<string, object> templateData)
         {
-            templateData.Add("Youtube", new
-            {
-                ViewCount = await this.client.GetCumulatedViewCount(),
-                FeaturedVideos = await this.client.GetFeaturedVideos();
-            });
+            templateData.Add("ViewCount", await this.client.GetCumulatedViewCount());
+            templateData.Add("Videos", await this.client.GetFeaturedVideos());
         }
     }
 }

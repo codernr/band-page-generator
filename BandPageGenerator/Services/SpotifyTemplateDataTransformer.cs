@@ -12,10 +12,7 @@ namespace BandPageGenerator.Services
 
         public async Task AddTemplateData(Dictionary<string, object> templateData)
         {
-            templateData.Add("Spotify", new
-            {
-                Albums = await this.client.GetAlbumsAsync()
-            });
+            templateData.Add("Albums", await this.client.GetAlbumsAsync());
         }
 }
 }

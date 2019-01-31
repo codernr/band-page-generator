@@ -14,12 +14,9 @@ namespace BandPageGenerator.Services
         {
             // TODO: conditionally add instagram data
 
-            templateData.Add("Facebook", new
-            {
-                Likes = await this.client.GetPageLikeCountAsync(),
-                Events = await this.client.GetPageEventsAsync(),
-                Photos = await this.client.GetFeaturedPhotosAsync()
-            });
+            templateData.Add("Likes", await this.client.GetPageLikeCountAsync());
+            templateData.Add("Events", await this.client.GetPageEventsAsync());
+            templateData.Add("FeaturedPhotos", await this.client.GetFeaturedPhotosAsync());
         }
     }
 }
