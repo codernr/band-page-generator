@@ -10,6 +10,7 @@ using Stubble.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace BandPageGenerator
 {
@@ -45,9 +46,9 @@ namespace BandPageGenerator
             (string key, IConfigurationRoot configuration, IServiceCollection collection)
             where TConfig : class where TClient : class where TTemplateDataTransformer : class, ITemplateDataTransformer
         {
-            var section = configuration.GetSection(key);
+            var section = configuration.GetChildren().FirstOrDefault(s => s.Key == key);
 
-            if (section.Value == null) return;
+            if (section == null) return;
 
             collection.Configure<TConfig>(section);
             collection.AddSingleton<TClient>();
