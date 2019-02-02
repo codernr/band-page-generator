@@ -13,5 +13,7 @@
         public string ApiVersion { get; set; }
 
         public string AccessToken { get; set; }
+
+        public int PastEventDisplayLimit { get; set; }
     }
 }
