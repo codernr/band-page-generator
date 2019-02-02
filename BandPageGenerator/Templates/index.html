@@ -93,6 +93,21 @@
             <img src="{{MediaUrl}}" class="img-fluid mt-1" />
             {{/InstagramPhotos}}
         </div>
+
+        <div class="row mt-2 mb-2">
+            <h2>Videos</h2>
+        </div>
+
+        <div class="row">
+            {{#Videos}}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="embed-responsive embed-responsive-16by9 my-1 mx-1">
+                    <iframe src="https://www.youtube.com/embed/{{Id}}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+            {{/Videos}}
+        </div>
+
     </div>
 </body>
 </html>
