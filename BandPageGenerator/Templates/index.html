@@ -31,11 +31,11 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row mt-2 mb-2">
             <h2>Upcoming events</h2>
         </div>
 
-        <div class="container">
+        <div class="row">
             {{#UpcomingEvents}}
             <div class="col-md">
                 <div class="card">
@@ -52,6 +52,26 @@
             {{^UpcomingEvents}}
             <p>There are no upcoming events.</p>
             {{/UpcomingEvents}}
+        </div>
+
+        <div class="row mt-2 mb-2">
+            <h2>Past events</h2>
+        </div>
+
+        <div class="row">
+            {{#PastEvents}}
+            <div class="col-lg-4 col-md-6 col-sm mb-2">
+                <div class="card">
+                    <img src="{{Cover.Source}}" class="card-img-top" />
+                    <div class="card-body">
+                        <h5 class="card-title">{{Name}}</h5>
+                        <h6>{{#StartTime}}{{#Render}}yyyy. MM. dd. HH:mm{{/Render}}{{/StartTime}}, {{Place.Name}}</h6>
+                        <p class="card-text">{{{FormattedDescription}}}</p>
+                        <a href="https://www.facebook.com/{{Id}}" class="btn btn-primary">Facebook</a>
+                    </div>
+                </div>
+            </div>
+            {{/PastEvents}}
         </div>
     </div>
 </body>
