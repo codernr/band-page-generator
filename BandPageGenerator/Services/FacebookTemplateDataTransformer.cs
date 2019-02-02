@@ -1,5 +1,7 @@
 ﻿using BandPageGenerator.Services.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
@@ -15,7 +17,12 @@ namespace BandPageGenerator.Services
             // TODO: conditionally add instagram data
 
             templateData.Add("Likes", await this.client.GetPageLikeCountAsync());
-            templateData.Add("Events", await this.client.GetPageEventsAsync());
+
+            var events = await this.client.GetPageEventsAsync();
+
+            templateData.Add("UpcomingEvents", events.Where(e => e.StartTime > DateTime.Now).ToArray());
+            templateData.Add("PastEvents", events.Where(e => e.StartTime < DateTime.Now).ToArray());
+
             templateData.Add("FeaturedPhotos", await this.client.GetFeaturedPhotosAsync());
             templateData.Add("InstagramPhotos", await this.client.GetRecentInstagramPhotosAsync());
             System.Console.WriteLine("addtemplate");

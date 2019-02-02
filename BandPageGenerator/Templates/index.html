@@ -9,7 +9,7 @@
             <h1 class="display-4">Hello world band</h1>
             <p class="lead">This is a sample website that utilizes BandPageGenerator API datas</p>
             <hr class="my-4">
-            <p>Currently it brings data from Facebook, Youtube and Spotify</p>
+            <p>Currently it fetches data from Facebook, Youtube and Spotify</p>
         </div>
 
         <div class="row">
@@ -25,10 +25,31 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ViewCount}}</h5>
-                        <p class="card-text">Facebook likes</p>
+                        <p class="card-text">Youtube views</p>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+            <h2>Upcoming events</h2>
+        </div>
+
+        <div class="container">
+            {{#UpcomingEvents}}
+            <div class="col-md">
+                <div class="card">
+                    <img src="{{Cover.Source}}" class="card-img-top" />
+                    <div class="card-body">
+                        <h5 class="card-title">{{Name}}</h5>
+                        <h6>{{Place.Name}}</h6>
+                    </div>
+                </div>
+            </div>
+            {{/UpcomingEvents}}
+            {{^UpcomingEvents}}
+            <p>There are no upcoming events.</p>
+            {{/UpcomingEvents}}
         </div>
     </div>
 </body>

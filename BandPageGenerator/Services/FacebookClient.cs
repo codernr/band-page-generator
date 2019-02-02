@@ -32,7 +32,7 @@ namespace BandPageGenerator.Services
         {
             return this.GetPagedGraphDataAsync<FacebookEventModel>(
                 $"{this.config.PageId}/events",
-                new[] { "cover", "category", "description", "end_time", "name", "start_time", "ticket_uri" },
+                new[] { "cover", "category", "description", "end_time", "name", "place", "start_time", "ticket_uri" },
                 new[] { ("event_state_filter", "[\"published\"]") });
         }
 
