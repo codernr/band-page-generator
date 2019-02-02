@@ -73,6 +73,26 @@
             </div>
             {{/PastEvents}}
         </div>
+
+        <div class="row mt-2 mb-2">
+            <h2>Photos</h2>
+        </div>
+
+        <div class="container" style="column-count: 3; column-gap: .75rem;">
+            {{#FeaturedPhotos}}
+            <img src="{{Source}}" class="img-fluid mt-1" />
+            {{/FeaturedPhotos}}
+        </div>
+
+        <div class="row mt-2 mb-2">
+            <h2>Instagram</h2>
+        </div>
+
+        <div class="container" style="column-count: 3; column-gap: .75rem;">
+            {{#InstagramPhotos}}
+            <img src="{{Source}}" class="img-fluid mt-1" />
+            {{/InstagramPhotos}}
+        </div>
     </div>
 </body>
 </html>
