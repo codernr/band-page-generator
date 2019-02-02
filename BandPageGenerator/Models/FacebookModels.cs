@@ -24,6 +24,8 @@ namespace BandPageGenerator.Models
 
         public string Name { get; set; }
 
+        public FacebookPlaceModel Place { get; set; }
+
         public DateTime StartTime { get; set; }
 
         public string TicketUri { get; set; }
