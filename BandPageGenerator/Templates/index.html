@@ -42,7 +42,7 @@
                     <img src="{{Cover.Source}}" class="card-img-top" />
                     <div class="card-body">
                         <h5 class="card-title">{{Name}}</h5>
-                        <h6>{{Place.Name}}</h6>
+                        <h6>{{#StartTime}}{{#Render}}yyyy. MM. dd. HH:mm{{/Render}}{{/StartTime}}{{Place.Name}}</h6>
                     </div>
                 </div>
             </div>

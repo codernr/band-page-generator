@@ -1,10 +1,9 @@
-﻿using BandPageGenerator.Services.Interfaces;
+﻿using BandPageGenerator.Serialization;
+using BandPageGenerator.Services.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
@@ -21,6 +20,7 @@ namespace BandPageGenerator.Services
             {
                 ContractResolver = new DefaultContractResolver { NamingStrategy = new TNamingStrategy() }
             };
+            this.serializer.Converters.Add(new MustacheDateTimeConverter());
         }
 
         public async Task<TModel> GetAsync<TModel>(string requestUri)

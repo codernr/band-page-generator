@@ -20,8 +20,8 @@ namespace BandPageGenerator.Services
 
             var events = await this.client.GetPageEventsAsync();
 
-            templateData.Add("UpcomingEvents", events.Where(e => e.StartTime > DateTime.Now).ToArray());
-            templateData.Add("PastEvents", events.Where(e => e.StartTime < DateTime.Now).ToArray());
+            templateData.Add("UpcomingEvents", events.Where(e => e.StartTime.DateTime > DateTime.Now).ToArray());
+            templateData.Add("PastEvents", events.Where(e => e.StartTime.DateTime < DateTime.Now).ToArray());
 
             templateData.Add("FeaturedPhotos", await this.client.GetFeaturedPhotosAsync());
             templateData.Add("InstagramPhotos", await this.client.GetRecentInstagramPhotosAsync());
