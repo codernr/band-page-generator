@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BandPageGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\WORK\\rendered.html"
+    }
+  }
+}
