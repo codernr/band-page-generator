@@ -25,7 +25,6 @@ namespace BandPageGenerator.Services
 
             templateData.Add("FeaturedPhotos", await this.client.GetFeaturedPhotosAsync());
             templateData.Add("InstagramPhotos", await this.client.GetRecentInstagramPhotosAsync());
-            System.Console.WriteLine("addtemplate");
         }
     }
 }
