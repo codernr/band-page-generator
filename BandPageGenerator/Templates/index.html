@@ -114,10 +114,19 @@
 
         <div class="row">
             {{#Albums}}
-            <div class="card col-12 col-md-6 col-lg-4 my-1 mx-1">
-                <div class="card-body">
-                    <h5 class="card-title">{{Name}}</h5>
-                    <p class="card-text">{{ReleaseDate}}, {{Label}}</p>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card my-1 mx-1">
+                    <img class="card-img-top" src="{{Image.Url}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{Name}}</h5>
+                        <p class="card-text">{{#ReleaseDate}}{{#Render}}yyyy. MM. dd.{{/Render}}{{/ReleaseDate}}, {{Label}}</p>
+                        <ol>
+                            {{#Tracks}}
+                            <li>{{Name}}</li>
+                            {{/Tracks}}
+                        </ol>
+                        <a href="https://open.spotify.com/album/{{Id}}" target="_blank" class="btn btn-primary">Listen on Spotify</a>
+                    </div>
                 </div>
             </div>
             {{/Albums}}

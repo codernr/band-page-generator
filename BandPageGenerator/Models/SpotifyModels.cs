@@ -19,25 +19,37 @@
         public string Href { get; set; }
     }
 
-    public class SpotifyAlbumModel
+    public class SpotifyAlbumBaseModel
     {
         public string AlbumType { get; set; }
 
         public string Id { get; set; }
 
-        public SpotifyImageModel[] Images { get; set; }
-
         public string Label { get; set; }
 
         public string Name { get; set; }
+        
+        public string Type;
+    }
+
+    public class SpotifyAlbumModel : SpotifyAlbumBaseModel
+    {
+        public string ReleaseDatePrecision { get; set; }
 
         public string ReleaseDate { get; set; }
 
-        public string ReleaseDatePrecision { get; set; }
+        public SpotifyImageModel[] Images { get; set; }
 
         public SpotifyPagingModel<SpotifyTrackModel> Tracks { get; set; }
+    }
 
-        public string Type;
+    public class SpotifyAlbumTemplateModel : SpotifyAlbumBaseModel
+    {
+        public SpotifyImageModel Image { get; set; }
+
+        public MustacheDateTime ReleaseDate { get; set; }
+
+        public SpotifyTrackModel[] Tracks { get; set; }
     }
 
     public class SpotifyImageModel
