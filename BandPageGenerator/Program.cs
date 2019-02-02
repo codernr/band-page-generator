@@ -1,5 +1,4 @@
-﻿using BandPageGenerator.Services;
-using BandPageGenerator.Services.Interfaces;
+﻿using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -24,13 +23,24 @@ namespace BandPageGenerator
                 Environment.Exit(-1);
             }
 
+            string templatesDirectory = "Templates";
+
+            if (args.Length == 2)
+            {
+                templatesDirectory = Path.Combine(Directory.GetCurrentDirectory(), args[1]);
+                if (Directory.Exists(templatesDirectory) && File.Exists(Path.Combine(templatesDirectory, "index.html")))
+                {
+                    logger.LogInformation("Loading templates from external directory: " + templatesDirectory);
+                }
+            }
+
             var outputPath = args[0];
 
             logger.LogInformation("Rendering to file: " + outputPath);
 
             RenderToFileAsync(
                 serviceProvider,
-                Path.Combine(Directory.GetCurrentDirectory(), "Templates/index.html"),
+                Path.Combine(Directory.GetCurrentDirectory(), templatesDirectory, "index.html"),
                 args[0]).Wait();
         }
 
