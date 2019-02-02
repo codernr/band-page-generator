@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace BandPageGenerator.Models
 {
@@ -19,6 +20,20 @@ namespace BandPageGenerator.Models
         public FacebookCoverPhotoModel Cover { get; set; }
 
         public string Description { get; set; }
+
+        public string FormattedDescription
+        {
+            get
+            {
+                if (this.Description == null) return null;
+
+                var br = this.Description.Replace("\n", "<br/>");
+
+                return Regex.Replace(br,
+                    @"((http|https|ftp)\://[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\-\._\?\,\'/\\\+&amp;%\$#\=~])*)",
+                    "<a href=\"$1\" target=\"_blank\">$1</a>");
+            }
+        }
 
         public DateTime EndTime { get; set; }
 
