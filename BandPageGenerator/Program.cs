@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BandPageGenerator
@@ -44,7 +45,7 @@ namespace BandPageGenerator
             foreach (var clientService in serviceProvider.GetServices<ITemplateDataTransformer>())
                 await clientService.AddTemplateDataAsync(templateData);
 
-            await File.WriteAllTextAsync(outputPath, await renderer.RenderViewToStringAsync(templatePath, templateData));
+            await File.WriteAllTextAsync(outputPath, await renderer.RenderViewToStringAsync(templatePath, templateData), Encoding.UTF8);
         }
     }
 }

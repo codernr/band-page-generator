@@ -1,4 +1,4 @@
-﻿<html>
+<html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 </head>
@@ -42,7 +42,9 @@
                     <img src="{{Cover.Source}}" class="card-img-top" />
                     <div class="card-body">
                         <h5 class="card-title">{{Name}}</h5>
-                        <h6>{{#StartTime}}{{#Render}}yyyy. MM. dd. HH:mm{{/Render}}{{/StartTime}}{{Place.Name}}</h6>
+                        <h6>{{#StartTime}}{{#Render}}yyyy. MM. dd. HH:mm{{/Render}}{{/StartTime}}, {{Place.Name}}</h6>
+                        <p class="card-text">{{Description}}</p>
+                        <a href="https://www.facebook.com/{{Id}}" class="btn btn-primary">Facebook</a>
                     </div>
                 </div>
             </div>
