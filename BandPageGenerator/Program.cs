@@ -32,8 +32,6 @@ namespace BandPageGenerator
                 serviceProvider,
                 Path.Combine(Directory.GetCurrentDirectory(), "Templates/index.html"),
                 args[0]).Wait();
-
-            Console.ReadKey();
         }
 
         static async Task RenderToFileAsync(IServiceProvider serviceProvider, string templatePath, string outputPath)
