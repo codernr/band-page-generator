@@ -1,19 +1,19 @@
 image: microsoft/dotnet:latest
 
 stages:
-- build
-- test
+#- build
+#- test
 - deploy
 
-build:
-  stage: build
-  script:
-  - dotnet build
+#build:
+#  stage: build
+#  script:
+#  - dotnet build
 
-test:
-  stage: test
-  script: 
-  - dotnet test
+#test:
+#  stage: test
+#  script: 
+#  - dotnet test
         
 deploy:
   stage: deploy
@@ -25,7 +25,6 @@ deploy:
     paths:
     - $CI_COMMIT_TAG.tar.gz  
   only:
-    - develop
-  #  - tags
+    - tags
   #except:
   #  - branches
