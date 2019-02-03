@@ -5,9 +5,6 @@ stages:
 - test
 - deploy
 
-before_script:
-- dotnet restore
-
 build:
   stage: build
   script:
@@ -23,11 +20,12 @@ deploy:
   script:
   - cd BandPageGenerator
   - dotnet publish -c Release
-  - zip -r $CI_COMMIT_TAG.zip BandPageGenerator/bin/Release/netcoreapp2.2/publish
+  - tar -czf $CI_COMMIT_TAG.tar.gz BandPageGenerator/bin/Release/netcoreapp2.2/publish
   artifacts:
     paths:
-    - $CI_COMMIT_TAG.zip  
+    - $CI_COMMIT_TAG.tar.gz  
   only:
-    - tags
-  except:
-    - branches
+    - develop
+  #  - tags
+  #except:
+  #  - branches
