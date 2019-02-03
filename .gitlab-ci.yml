@@ -20,7 +20,7 @@ deploy:
   script:
   - cd BandPageGenerator
   - dotnet publish -c Release
-  - tar -czf $CI_COMMIT_TAG.tar.gz BandPageGenerator/bin/Release/netcoreapp2.2/publish
+  - tar -czf $CI_COMMIT_TAG.tar.gz ./bin/Release/netcoreapp2.2/publish
   artifacts:
     paths:
     - $CI_COMMIT_TAG.tar.gz  
