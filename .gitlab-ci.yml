@@ -22,6 +22,7 @@ deploy:
   - dotnet publish -c Release
   - tar -czf ../$CI_COMMIT_TAG.tar.gz ./bin/Release/netcoreapp2.2/publish
   - cd "../"
+  - chmod +x ./release.sh
   - ./release.sh
   only:
     - tags
