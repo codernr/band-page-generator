@@ -16,7 +16,7 @@ namespace BandPageGenerator
 {
     public static class ServiceConfiguration
     {
-        public static IServiceProvider ConfigureServiceProvider()
+        public static IServiceProvider ConfigureServiceProvider(string settings)
         {
             var serviceCollection = new ServiceCollection()
                 .AddLogging(logging => logging.AddConsole())
@@ -28,7 +28,7 @@ namespace BandPageGenerator
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false)
+                .AddJsonFile(settings, false)
                 .Build();
             serviceCollection.AddOptions();
 

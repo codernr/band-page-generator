@@ -13,7 +13,17 @@ namespace BandPageGenerator
     {
         static void Main(string[] args)
         {
-            var serviceProvider = ServiceConfiguration.ConfigureServiceProvider();
+            var settings = "appsettings.json";
+
+            if (args.Length == 3)
+            {
+                if (File.Exists(args[2]))
+                {
+                    settings = args[2];
+                }
+            }
+
+            var serviceProvider = ServiceConfiguration.ConfigureServiceProvider(settings);
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
