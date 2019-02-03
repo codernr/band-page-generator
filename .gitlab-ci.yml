@@ -1,0 +1,29 @@
+image: microsoft/dotnet:latest
+
+stages:
+- build
+- test
+- deploy
+
+before_script:
+- dotnet restore
+
+build:
+  stage: build
+  script:
+  - dotnet build
+
+test:
+  stage: test
+  script: 
+  - dotnet test
+        
+deploy:
+  stage: deploy
+  script:
+  - cd BandPageGenerator
+  - dotnet publish -c Release
+  artifacts:
+    paths:
+    - BandPageGenerator/bin/Release/netcoreapp2.2/publish  
+            
