@@ -1,19 +1,13 @@
 image: microsoft/dotnet:latest
 
 stages:
-#- build
-#- test
+- test
 - deploy
 
-#build:
-#  stage: build
-#  script:
-#  - dotnet build
-
-#test:
-#  stage: test
-#  script: 
-#  - dotnet test
+test:
+  stage: test
+  script: 
+  - dotnet test
         
 deploy:
   stage: deploy
@@ -26,5 +20,5 @@ deploy:
   - ./release.sh
   only:
     - tags
-  #except:
-  #  - branches
+  except:
+    - branches
