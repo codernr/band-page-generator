@@ -27,8 +27,7 @@ namespace BandPageGenerator
             serviceCollection.AddHttpClient<IJsonHttpClient<CamelCaseNamingStrategy>, JsonHttpClient<CamelCaseNamingStrategy>>();
 
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(settings, false)
+                .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), settings), false)
                 .Build();
             serviceCollection.AddOptions();
 
