@@ -35,9 +35,9 @@ namespace BandPageGenerator
 
             string templatesDirectory = "Templates";
 
-            if (args.Length == 2)
+            if (args.Length > 1)
             {
-                templatesDirectory = Path.Combine(Directory.GetCurrentDirectory(), args[1]);
+                templatesDirectory = args[1];
                 if (Directory.Exists(templatesDirectory) && File.Exists(Path.Combine(templatesDirectory, "index.html")))
                 {
                     logger.LogInformation("Loading templates from external directory: " + templatesDirectory);
