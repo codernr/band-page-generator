@@ -1,4 +1,6 @@
-﻿namespace BandPageGenerator.Models
+﻿using System;
+
+namespace BandPageGenerator.Models
 {
     public class SpotifyClientCredentialsModel
     {
@@ -47,7 +49,7 @@
     {
         public SpotifyImageModel Image { get; set; }
 
-        public MustacheDateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
 
         public SpotifyTrackModel[] Tracks { get; set; }
     }

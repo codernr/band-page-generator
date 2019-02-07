@@ -34,7 +34,7 @@ namespace BandPageGenerator.Services
             };
         }
 
-        private MustacheDateTime MapReleaseDate(string releaseDate, string releaseDatePrecision)
+        private DateTime? MapReleaseDate(string releaseDate, string releaseDatePrecision)
         {
             if (string.IsNullOrEmpty(releaseDate)) return null;
 
@@ -43,13 +43,13 @@ namespace BandPageGenerator.Services
             switch (releaseDatePrecision)
             {
                 case "year":
-                    return new MustacheDateTime { DateTime = new DateTime(int.Parse(releaseDate), 0, 0) };
+                    return new DateTime(int.Parse(releaseDate), 0, 0);
 
                 case "month":
-                    return new MustacheDateTime { DateTime = new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), 0) };
+                    return new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), 0);
 
                 case "day":
-                    return new MustacheDateTime { DateTime = new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2])) };
+                    return new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
 
                 default:
                     return null;

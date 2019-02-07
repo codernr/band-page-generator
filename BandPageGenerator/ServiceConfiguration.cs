@@ -5,10 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using Stubble.Core.Builders;
-using Stubble.Core.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -20,8 +17,7 @@ namespace BandPageGenerator
         {
             var serviceCollection = new ServiceCollection()
                 .AddLogging(logging => logging.AddConsole())
-                .AddSingleton<IAsyncStubbleRenderer>(new StubbleBuilder().Build())
-                .AddSingleton<IViewRenderer, StubbleViewRenderer>();
+                .AddSingleton<IViewRenderer, HandlebarsViewRenderer>();
 
             serviceCollection.AddHttpClient<IJsonHttpClient<SnakeCaseNamingStrategy>, JsonHttpClient<SnakeCaseNamingStrategy>>();
             serviceCollection.AddHttpClient<IJsonHttpClient<CamelCaseNamingStrategy>, JsonHttpClient<CamelCaseNamingStrategy>>();
