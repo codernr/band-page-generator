@@ -1,8 +1,10 @@
 ﻿using BandPageGenerator.Services.Interfaces;
+using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,47 +13,42 @@ namespace BandPageGenerator
 {
     class Program
     {
-        static void Main(string[] args)
-        {
-            var settings = "appsettings.json";
+        [Option]
+        public string SettingsPath { get; }
 
-            if (args.Length == 3)
-            {
-                if (File.Exists(args[2]))
-                {
-                    settings = args[2];
-                }
-            }
+        [Option]
+        public string TemplateDirectoryPath { get; }
+
+        [Option]
+        [Required]
+        public string OutputPath { get; }
+
+        static void Main(string[] args) => CommandLineApplication.Execute<Program>(args);
+
+        private void OnExecute()
+        {
+            var settings = this.SettingsPath ?? "appsettings.json";
 
             var serviceProvider = ServiceConfiguration.ConfigureServiceProvider(settings);
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 
-            if (args.Length == 0)
-            {
-                logger.LogError("No output file path provided, exiting");
-                Environment.Exit(-1);
-            }
-
             string templatesDirectory = "Templates";
 
-            if (args.Length > 1)
+            if (this.TemplateDirectoryPath != null
+                && Directory.Exists(this.TemplateDirectoryPath)
+                && File.Exists(Path.Combine(this.TemplateDirectoryPath, "index.html")))
             {
-                templatesDirectory = args[1];
-                if (Directory.Exists(templatesDirectory) && File.Exists(Path.Combine(templatesDirectory, "index.html")))
-                {
-                    logger.LogInformation("Loading templates from external directory: " + templatesDirectory);
-                }
+                logger.LogInformation("Loading templates from external directory: " + templatesDirectory);
+                templatesDirectory = this.TemplateDirectoryPath;
             }
 
-            var outputPath = args[0];
-
-            logger.LogInformation("Rendering to file: " + outputPath);
+            logger.LogInformation("Rendering to file: " + this.OutputPath);
 
             RenderToFileAsync(
                 serviceProvider,
                 Path.Combine(Directory.GetCurrentDirectory(), templatesDirectory, "index.html"),
-                args[0]).Wait();
+                this.OutputPath).Wait();
         }
 
         static async Task RenderToFileAsync(IServiceProvider serviceProvider, string templatePath, string outputPath)

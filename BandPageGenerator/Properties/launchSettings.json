@@ -2,7 +2,7 @@
   "profiles": {
     "BandPageGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\WORK\\rendered.html"
+      "commandLineArgs": "-o C:\\WORK\\rendered.html -s C:\\WORK\\BandPageGenerator-appsettings.json"
     }
   }
 }
