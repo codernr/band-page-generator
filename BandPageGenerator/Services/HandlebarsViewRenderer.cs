@@ -1,6 +1,7 @@
 ﻿using BandPageGenerator.Services.Interfaces;
 using HandlebarsDotNet;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -37,7 +38,7 @@ namespace BandPageGenerator.Services
             DateTime date = (DateTime)arguments[0];
             string format = (string)arguments[1];
 
-            output.WriteSafeString(date.ToString(format));
+            output.WriteSafeString(date.ToString(format, CultureInfo.InvariantCulture));
         }
     }
 }
