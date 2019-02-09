@@ -43,7 +43,7 @@ namespace Tests
         }
 
         [Fact]
-        public async void ShouldSelectBiggestImages()
+        public async void ShouldReturnAlbumList()
         {
             var client = this.CreateClient(new FacebookListModel<FacebookAlbumPhotosModel>
             {
@@ -64,11 +64,11 @@ namespace Tests
 
             var graph = new FacebookClient(options.Object, client.Object);
 
-            var photos = await graph.GetFeaturedPhotosAsync();
+            var photos = await graph.GetAlbumAsync("aaa");
 
             Assert.Equal(2, photos.Count);
-            Assert.Equal(2, photos[0].Height);
-            Assert.Equal(4, photos[1].Height);
+            Assert.Equal(2, photos[0].Images[1].Height);
+            Assert.Equal(4, photos[1].Images[1].Height);
         }
 
         [Fact]
