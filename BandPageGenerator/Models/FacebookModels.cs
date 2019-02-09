@@ -96,6 +96,8 @@ namespace BandPageGenerator.Models
 
     public class FacebookAlbumPhotosModel
     {
+        public string Name { get; set; }
+
         public FacebookPhotoModel[] Images { get; set; }
     }
 
@@ -106,6 +108,13 @@ namespace BandPageGenerator.Models
         public int Width { get; set; }
 
         public string Source { get; set; }
+    }
+
+    public class FacebookMemberPhotoModel : FacebookPhotoModel
+    {
+        public string Name { get; set; }
+
+        public string Description { get; set; }
     }
 
     public class FacebookListModel<TModel>

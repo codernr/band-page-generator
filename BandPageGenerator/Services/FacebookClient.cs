@@ -39,12 +39,10 @@ namespace BandPageGenerator.Services
         /// <summary>
         /// Gets the photos from the featured album with the biggest resolution
         /// </summary>
-        public async Task<List<FacebookPhotoModel>> GetFeaturedPhotosAsync()
+        public async Task<List<FacebookAlbumPhotosModel>> GetAlbumAsync(string albumId)
         {
-            var photos = await this.GetPagedGraphDataAsync<FacebookAlbumPhotosModel>(
-                $"{this.config.AlbumId}/photos", new[] { "images", "link" });
-
-            return photos.Select(p => p.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2)).ToList();
+            return await this.GetPagedGraphDataAsync<FacebookAlbumPhotosModel>(
+                $"{albumId}/photos", new[] { "images", "link", "name" });
         }
 
         public async Task<FacebookInstagramMediaModel[]> GetRecentInstagramPhotosAsync()
