@@ -1,5 +1,7 @@
-﻿using BandPageGenerator.Models;
+﻿using BandPageGenerator.Config;
+using BandPageGenerator.Models;
 using BandPageGenerator.Services.Interfaces;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,13 @@ namespace BandPageGenerator.Services
     {
         private readonly SpotifyClient client;
 
-        public SpotifyTemplateDataTransformer(SpotifyClient client) => this.client = client;
+        private readonly Spotify config;
+
+        public SpotifyTemplateDataTransformer(SpotifyClient client, IOptions<Spotify> config)
+        {
+            this.client = client;
+            this.config = config.Value;
+        }
 
         public async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
         {
@@ -30,7 +38,9 @@ namespace BandPageGenerator.Services
                 ReleaseDate = this.MapReleaseDate(model.ReleaseDate, model.ReleaseDatePrecision),
                 Type = model.Type,
                 Image = model.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2),
-                Tracks = model.Tracks.Items.OrderBy(t => t.TrackNumber).ToArray()
+                Tracks = model.Tracks.Items.OrderBy(t => t.TrackNumber).ToArray(),
+                AlternativeLinks = this.config.AlternativeLinks?
+                    .FirstOrDefault(al => al.Title.ToLowerInvariant().Trim() == model.Name.ToLowerInvariant().Trim())?.Links
             };
         }
 

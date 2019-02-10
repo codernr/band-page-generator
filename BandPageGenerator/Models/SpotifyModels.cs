@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BandPageGenerator.Models
 {
@@ -52,6 +53,8 @@ namespace BandPageGenerator.Models
         public DateTime? ReleaseDate { get; set; }
 
         public SpotifyTrackModel[] Tracks { get; set; }
+
+        public Dictionary<string, string> AlternativeLinks { get; set; }
     }
 
     public class SpotifyImageModel
