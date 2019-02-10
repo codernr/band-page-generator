@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BandPageGenerator.Models
 {
@@ -37,7 +39,24 @@ namespace BandPageGenerator.Models
 
     public class YoutubeThumbnailsCollectionModel
     {
+        public YoutubeThumbnailModel Default { get; set; }
+        public YoutubeThumbnailModel Medium { get; set; }
+        public YoutubeThumbnailModel High { get; set; }
+        public YoutubeThumbnailModel Standard { get; set; }
         public YoutubeThumbnailModel Maxres { get; set; }
+
+        public List<YoutubeThumbnailModel> ToList()
+        {
+            var list = new List<YoutubeThumbnailModel>();
+
+            if (this.Default != null) list.Add(this.Default);
+            if (this.Medium != null) list.Add(this.Medium);
+            if (this.High != null) list.Add(this.High);
+            if (this.Standard != null) list.Add(this.Standard);
+            if (this.Maxres != null) list.Add(this.Maxres);
+
+            return list;
+        }
     }
 
     public class YoutubeThumbnailModel
@@ -75,7 +94,7 @@ namespace BandPageGenerator.Models
             this.PublishedAt = snippet.Snippet.PublishedAt;
             this.Title = snippet.Snippet.Title;
             this.Description = snippet.Snippet.Description;
-            this.Thumbnail = snippet.Snippet.Thumbnails.Maxres;
+            this.Thumbnail = snippet.Snippet.Thumbnails.ToList().Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2);
         }
     }
 }
