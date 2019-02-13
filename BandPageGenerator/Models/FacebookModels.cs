@@ -110,6 +110,11 @@ namespace BandPageGenerator.Models
         public string Source { get; set; }
     }
 
+    public class FacebookProfilePictureModel
+    {
+        public string Url { get; set; }
+    }
+
     public class FacebookMemberPhotoModel : FacebookPhotoModel
     {
         public string Name { get; set; }
@@ -122,6 +127,11 @@ namespace BandPageGenerator.Models
         public TModel[] Data { get; set; }
 
         public FacebookPagingModel Paging { get; set; }
+    }
+
+    public class FacebookDataModel<TModel>
+    {
+        public TModel Data { get; set; }
     }
 
     public class FacebookPagingModel

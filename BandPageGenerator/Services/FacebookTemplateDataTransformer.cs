@@ -26,6 +26,8 @@ namespace BandPageGenerator.Services
 
             templateData.Add("Likes", await this.client.GetPageLikeCountAsync());
 
+            templateData.Add("ProfilePictureUrl", await this.client.GetProfilePictureAsync());
+
             var events = await this.client.GetPageEventsAsync();
 
             templateData.Add("UpcomingEvents", events.Where(e => e.StartTime > DateTime.Now).ToArray());

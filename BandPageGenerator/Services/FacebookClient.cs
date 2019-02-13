@@ -58,6 +58,14 @@ namespace BandPageGenerator.Services
             return images.ToArray();
         }
 
+        public async Task<string> GetProfilePictureAsync()
+        {
+            var data = await this.GetGraphDataAsync<FacebookDataModel<FacebookProfilePictureModel>>(
+                $"{this.config.PageId}/picture", new[] { "url" }, new[] { ("redirect", "0"), ("width", "1200") });
+
+            return data.Data.Url;
+        }
+
         private async Task<List<TModel>> GetPagedGraphDataAsync<TModel>(string edge, string[] fields, (string, string)[] filters = null)
         {
             var dataList = new List<TModel>();
