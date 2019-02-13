@@ -68,7 +68,15 @@ namespace BandPageGenerator.Models
 
     public class SpotifyTrackModel
     {
-        public int DurationMs { get; set; }
+        public double DurationMs { get; set; }
+
+        public TimeSpan Duration
+        {
+            get
+            {
+                return TimeSpan.FromMilliseconds(this.DurationMs);
+            }
+        }
 
         public string Id { get; set; }
 
