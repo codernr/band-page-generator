@@ -60,7 +60,7 @@ namespace BandPageGenerator
             foreach (var clientService in serviceProvider.GetServices<ITemplateDataTransformer>())
                 await clientService.AddTemplateDataAsync(templateData);
 
-            await File.WriteAllTextAsync(outputPath, await renderer.RenderViewToStringAsync(templatePath, templateData), Encoding.UTF8);
+            await File.WriteAllTextAsync(outputPath, await renderer.RenderViewToStringAsync(templatePath, templateData), new UTF8Encoding(false));
         }
     }
 }
