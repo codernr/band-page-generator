@@ -10,11 +10,11 @@ namespace BandPageGenerator.Services
 {
     public class YoutubeClient
     {
-        private readonly Youtube config;
+        private readonly YoutubeConfig config;
         private readonly IFormattedHttpClient client;
         private const string apiUri = "https://www.googleapis.com/youtube/v3/";
 
-        public YoutubeClient(IOptions<Youtube> config, IJsonHttpClient<CamelCaseNamingStrategy> client)
+        public YoutubeClient(IOptions<YoutubeConfig> config, IJsonHttpClient<CamelCaseNamingStrategy> client)
         {
             this.config = config.Value;
             this.client = client;

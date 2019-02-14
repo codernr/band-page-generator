@@ -26,8 +26,8 @@ namespace Tests
                 }
                 });
 
-            var options = new Mock<IOptions<Youtube>>();
-            options.Setup(o => o.Value).Returns(new Youtube());
+            var options = new Mock<IOptions<YoutubeConfig>>();
+            options.Setup(o => o.Value).Returns(new YoutubeConfig());
 
             var youtubeClient = new YoutubeClient(options.Object, client.Object);
 
@@ -56,8 +56,8 @@ namespace Tests
                     } } }
                 });
 
-            var options = new Mock<IOptions<Youtube>>();
-            options.Setup(o => o.Value).Returns(new Youtube());
+            var options = new Mock<IOptions<YoutubeConfig>>();
+            options.Setup(o => o.Value).Returns(new YoutubeConfig());
 
             var youtubeClient = new YoutubeClient(options.Object, client.Object);
 
