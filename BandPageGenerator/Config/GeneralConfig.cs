@@ -2,6 +2,6 @@
 {
     public class GeneralConfig
     {
-        public string BasePath { get; set; }
+        public string DownloadedBasePath { get; set; }
     }
 }
