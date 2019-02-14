@@ -28,6 +28,8 @@ namespace BandPageGenerator
                 .Build();
             serviceCollection.AddOptions();
 
+            serviceCollection.Configure<GeneralConfig>(configuration.GetSection("General"));
+
             AddProviderServices<FacebookConfig, FacebookClient, FacebookTemplateDataTransformer>(
                 "Facebook", configuration, serviceCollection);
             AddProviderServices<YoutubeConfig, YoutubeClient, YoutubeTemplateDataTransformer>(
