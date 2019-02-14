@@ -30,9 +30,9 @@ namespace BandPageGenerator
 
             AddProviderServices<FacebookConfig, FacebookClient, FacebookTemplateDataTransformer>(
                 "Facebook", configuration, serviceCollection);
-            AddProviderServices<Youtube, YoutubeClient, YoutubeTemplateDataTransformer>(
+            AddProviderServices<YoutubeConfig, YoutubeClient, YoutubeTemplateDataTransformer>(
                 "Youtube", configuration, serviceCollection);
-            AddProviderServices<Spotify, SpotifyClient, SpotifyTemplateDataTransformer>(
+            AddProviderServices<SpotifyConfig, SpotifyClient, SpotifyTemplateDataTransformer>(
                 "Spotify", configuration, serviceCollection);
 
             return serviceCollection.BuildServiceProvider();
