@@ -11,10 +11,10 @@ namespace BandPageGenerator.Services
 {
     public class FacebookClient
     {
-        private readonly Facebook config;
+        private readonly FacebookConfig config;
         private readonly IFormattedHttpClient client;
 
-        public FacebookClient(IOptions<Facebook> config, IJsonHttpClient<SnakeCaseNamingStrategy> client)
+        public FacebookClient(IOptions<FacebookConfig> config, IJsonHttpClient<SnakeCaseNamingStrategy> client)
         {
             this.config = config.Value;
             this.client = client;

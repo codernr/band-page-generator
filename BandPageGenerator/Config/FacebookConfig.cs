@@ -1,6 +1,6 @@
 ﻿namespace BandPageGenerator.Config
 {
-    public class Facebook
+    public class FacebookConfig
     {
         public string PageId { get; set; }
 

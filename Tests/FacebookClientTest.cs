@@ -16,7 +16,7 @@ namespace Tests
         {
             var client = this.CreateClient(new FacebookFanCountModel { FanCount = 3 });
 
-            var options = this.CreateOptions(new Facebook());
+            var options = this.CreateOptions(new FacebookConfig());
 
             var graph = new FacebookClient(options.Object, client.Object);
 
@@ -33,7 +33,7 @@ namespace Tests
                 Data = new[] { new FacebookEventModel(), new FacebookEventModel() }
             });
 
-            var options = this.CreateOptions(new Facebook());
+            var options = this.CreateOptions(new FacebookConfig());
 
             var graph = new FacebookClient(options.Object, client.Object);
 
@@ -60,7 +60,7 @@ namespace Tests
                 }
             });
 
-            var options = this.CreateOptions(new Facebook());
+            var options = this.CreateOptions(new FacebookConfig());
 
             var graph = new FacebookClient(options.Object, client.Object);
 
@@ -87,7 +87,7 @@ namespace Tests
                     Data = new[] { new FacebookEventModel() }
                 });
 
-            var options = this.CreateOptions(new Facebook());
+            var options = this.CreateOptions(new FacebookConfig());
 
             var graph = new FacebookClient(options.Object, client.Object);
 
@@ -104,7 +104,7 @@ namespace Tests
                 new FacebookInstagramMediaModel { MediaType = "VIDEO" }
             }});
 
-            var options = this.CreateOptions(new Facebook());
+            var options = this.CreateOptions(new FacebookConfig());
 
             var facebookClient = new FacebookClient(options.Object, client.Object);
 
@@ -126,7 +126,7 @@ namespace Tests
             }
             });
 
-            var options = this.CreateOptions(new Facebook { FilterHashtags = new[] { "#hashtag1", "#hashtag2" } });
+            var options = this.CreateOptions(new FacebookConfig { FilterHashtags = new[] { "#hashtag1", "#hashtag2" } });
 
             var facebookClient = new FacebookClient(options.Object, client.Object);
 
@@ -144,9 +144,9 @@ namespace Tests
             return client;
         }
 
-        private Mock<IOptions<Facebook>> CreateOptions(Facebook returnValue)
+        private Mock<IOptions<FacebookConfig>> CreateOptions(FacebookConfig returnValue)
         {
-            var options = new Mock<IOptions<Facebook>>();
+            var options = new Mock<IOptions<FacebookConfig>>();
             options.Setup(o => o.Value).Returns(returnValue);
             return options;
         }
