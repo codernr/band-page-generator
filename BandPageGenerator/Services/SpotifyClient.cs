@@ -14,13 +14,13 @@ namespace BandPageGenerator.Services
 {
     public class SpotifyClient
     {
-        private readonly Spotify config;
+        private readonly SpotifyConfig config;
         private readonly IFormattedHttpClient client;
         private const string apiUri = "https://api.spotify.com/v1/";
         private const string authUri = "https://accounts.spotify.com/api/token";
         private SpotifyClientCredentialsModel credentials;
 
-        public SpotifyClient(IOptions<Spotify> config, IJsonHttpClient<SnakeCaseNamingStrategy> client)
+        public SpotifyClient(IOptions<SpotifyConfig> config, IJsonHttpClient<SnakeCaseNamingStrategy> client)
         {
             this.config = config.Value;
             this.client = client;

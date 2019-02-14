@@ -38,8 +38,8 @@ namespace Tests
                 It.IsAny<string>(), It.IsAny<HttpContent>(), It.IsAny<(string, string)[]>()))
                 .ReturnsAsync(new SpotifyClientCredentialsModel());
 
-            var options = new Mock<IOptions<Spotify>>();
-            options.Setup(o => o.Value).Returns(new Spotify());
+            var options = new Mock<IOptions<SpotifyConfig>>();
+            options.Setup(o => o.Value).Returns(new SpotifyConfig());
 
             var spotifyClient = new SpotifyClient(options.Object, client.Object);
 

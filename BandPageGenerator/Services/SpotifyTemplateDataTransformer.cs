@@ -13,9 +13,9 @@ namespace BandPageGenerator.Services
     {
         private readonly SpotifyClient client;
 
-        private readonly Spotify config;
+        private readonly SpotifyConfig config;
 
-        public SpotifyTemplateDataTransformer(SpotifyClient client, IOptions<Spotify> config)
+        public SpotifyTemplateDataTransformer(SpotifyClient client, IOptions<SpotifyConfig> config)
         {
             this.client = client;
             this.config = config.Value;
