@@ -13,11 +13,13 @@ namespace BandPageGenerator.Services
     {
         private readonly FacebookClient client;
         private readonly Facebook config;
+        private readonly DownloaderClient downloader;
 
-        public FacebookTemplateDataTransformer(FacebookClient client, IOptions<Facebook> config)
+        public FacebookTemplateDataTransformer(FacebookClient client, IOptions<Facebook> config, DownloaderClient downloader)
         {
             this.client = client;
             this.config = config.Value;
+            this.downloader = downloader;
         }
 
         public async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
