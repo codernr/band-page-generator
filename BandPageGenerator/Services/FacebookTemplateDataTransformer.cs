@@ -13,12 +13,16 @@ namespace BandPageGenerator.Services
     {
         private readonly FacebookClient client;
         private readonly FacebookConfig config;
+        private readonly GeneralConfig generalConfig;
         private readonly DownloaderClient downloader;
 
-        public FacebookTemplateDataTransformer(FacebookClient client, IOptions<FacebookConfig> config, DownloaderClient downloader)
+        public FacebookTemplateDataTransformer(
+            FacebookClient client, IOptions<FacebookConfig> config, DownloaderClient downloader,
+            IOptions<GeneralConfig> generalConfig)
         {
             this.client = client;
             this.config = config.Value;
+            this.generalConfig = generalConfig.Value;
             this.downloader = downloader;
         }
 
@@ -28,7 +32,10 @@ namespace BandPageGenerator.Services
 
             templateData.Add("Likes", await this.client.GetPageLikeCountAsync());
 
-            templateData.Add("ProfilePictureUrl", await this.client.GetProfilePictureAsync());
+            var profilePictureUri = await this.client.GetProfilePictureAsync();
+
+            templateData.Add("ProfilePictureUrl", await this.downloader.DownloadFile(
+                profilePictureUri, "profile", this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath));
 
             var events = await this.client.GetPageEventsAsync();
 
@@ -37,21 +44,32 @@ namespace BandPageGenerator.Services
 
             templateData.Add("FeaturedPhotos", await this.GetFeaturedPhotosAsync());
             templateData.Add("MemberPhotos", await this.GetMemberPhotosAsync());
-            templateData.Add("InstagramPhotos", await this.client.GetRecentInstagramPhotosAsync());
+            templateData.Add("InstagramPhotos", await this.GetInstagramPhotos());
         }
 
         private async Task<List<FacebookPhotoModel>> GetFeaturedPhotosAsync()
         {
             var photos = await this.client.GetAlbumAsync(this.config.AlbumId);
 
-            return photos.Select(p => p.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2)).ToList();
+            var list = photos.Select(p => p.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2)).ToList();
+
+            var download = list.Select(async item =>
+            {
+                item.Source = await this.downloader.DownloadFile(
+                    item.Source, Guid.NewGuid().ToString(), this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
+                return item;
+            }).ToList();
+
+            await Task.WhenAll(download);
+
+            return download.Select(t => t.Result).ToList();
         }
 
         private async Task<List<FacebookMemberPhotoModel>> GetMemberPhotosAsync()
         {
             var photos = await this.client.GetAlbumAsync(this.config.MembersAlbumId);
 
-            return photos.Select(p =>
+            var tasks = photos.Select(async p =>
             {
                 var data = p.Name.Split('\n');
                 if (data.Length < 2) throw new FormatException("Member photos description has to have a new line in it!");
@@ -63,9 +81,30 @@ namespace BandPageGenerator.Services
                     Description = data[1],
                     Width = image.Width,
                     Height = image.Height,
-                    Source = image.Source
+                    Source = await this.downloader.DownloadFile(
+                        image.Source, Guid.NewGuid().ToString(), this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath)
                 };
             }).ToList();
+
+            await Task.WhenAll(tasks);
+
+            return tasks.Select(t => t.Result).ToList();
+        }
+
+        private async Task<List<FacebookInstagramMediaModel>> GetInstagramPhotos()
+        {
+            var photos = await this.client.GetRecentInstagramPhotosAsync();
+
+            var tasks = photos.Select(async p =>
+            {
+                p.MediaUrl = await this.downloader.DownloadFile(
+                    p.MediaUrl, Guid.NewGuid().ToString(), this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
+                return p;
+            }).ToList();
+
+            await Task.WhenAll(tasks);
+
+            return tasks.Select(t => t.Result).ToList();
         }
     }
 }

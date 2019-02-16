@@ -29,7 +29,7 @@ namespace BandPageGenerator
             serviceCollection.AddOptions();
 
             serviceCollection.Configure<GeneralConfig>(generalConfig => {
-                generalConfig.DownloadedBasePath = configuration.GetSection("GeneralConfig")["DownloadedBasePath"];
+                generalConfig.DownloadedBasePath = configuration.GetSection("General")["DownloadedBasePath"];
                 generalConfig.DownloadSavePath = downloadSavePath;
             });
 

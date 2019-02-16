@@ -2,7 +2,7 @@
   "profiles": {
     "BandPageGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "-o C:\\WORK\\SZ4P\\public\\index.html -t C:\\WORK\\SZ4P\\sz4p.gitlab.io\\public\\ -s C:\\WORK\\BandPageGenerator-appsettings.json"
+      "commandLineArgs": "-o C:\\WORK\\SZ4P\\public\\index.html -t C:\\WORK\\SZ4P\\sz4p.gitlab.io\\public\\ -s C:\\WORK\\BandPageGenerator-appsettings.json -d C:\\WORK\\SZ4P\\public\\downloads"
     }
   }
 }
