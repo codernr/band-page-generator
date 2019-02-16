@@ -23,13 +23,16 @@ namespace BandPageGenerator
         [Required]
         public string OutputPath { get; }
 
+        [Option]
+        public string DownloadSavePath { get; set; }
+
         static void Main(string[] args) => CommandLineApplication.Execute<Program>(args);
 
         private void OnExecute()
         {
             var settings = this.SettingsPath ?? "appsettings.json";
 
-            var serviceProvider = ServiceConfiguration.ConfigureServiceProvider(settings);
+            var serviceProvider = ServiceConfiguration.ConfigureServiceProvider(settings, this.DownloadSavePath);
 
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
 

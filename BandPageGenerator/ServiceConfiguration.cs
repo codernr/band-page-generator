@@ -13,7 +13,7 @@ namespace BandPageGenerator
 {
     public static class ServiceConfiguration
     {
-        public static IServiceProvider ConfigureServiceProvider(string settings)
+        public static IServiceProvider ConfigureServiceProvider(string settings, string downloadSavePath)
         {
             var serviceCollection = new ServiceCollection()
                 .AddLogging(logging => logging.AddConsole())
@@ -28,7 +28,10 @@ namespace BandPageGenerator
                 .Build();
             serviceCollection.AddOptions();
 
-            serviceCollection.Configure<GeneralConfig>(configuration.GetSection("General"));
+            serviceCollection.Configure<GeneralConfig>(generalConfig => {
+                generalConfig.DownloadedBasePath = configuration.GetSection("GeneralConfig")["DownloadedBasePath"];
+                generalConfig.DownloadSavePath = downloadSavePath;
+            });
 
             AddProviderServices<FacebookConfig, FacebookClient, FacebookTemplateDataTransformer>(
                 "Facebook", configuration, serviceCollection);
