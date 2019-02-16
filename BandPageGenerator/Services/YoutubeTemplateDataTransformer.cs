@@ -2,8 +2,11 @@
 using BandPageGenerator.Models;
 using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
@@ -31,16 +34,32 @@ namespace BandPageGenerator.Services
         {
             var videoList = await this.client.GetFeaturedVideos();
 
-            var tasks = videoList.Select(async v =>
+            return (await this.Replace(videoList, v => v.Thumbnail.Url, v => v.Id)).ToList();
+        }
+
+        private async Task<IEnumerable<T>> Replace<T>(IEnumerable<T> data, Expression<Func<T, string>> memberLambda, Expression<Func<T, string>> idLambda)
+        {
+            var tasks = data.Select(async target =>
             {
-                v.Thumbnail.Url = await this.downloader.DownloadFile(
-                    v.Thumbnail.Url, v.Id, this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
-                return v;
-            }).ToList();
+                var memberSelectorExpression = memberLambda.Body as MemberExpression;
+                var idSelectorExpression = idLambda.Body as MemberExpression;
+                if (memberSelectorExpression != null && idSelectorExpression != null)
+                {
+                    var property = memberSelectorExpression.Member as PropertyInfo;
+                    var idProperty = idSelectorExpression.Member as PropertyInfo;
+                    if (property != null)
+                    {
+                        property.SetValue(target, await this.downloader.DownloadFile(
+                            property.GetValue(target) as string, idProperty.GetValue(target) as string,
+                            this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath), null);
+                    }
+                }
+                return target;
+            });
 
             await Task.WhenAll(tasks);
 
-            return tasks.Select(t => t.Result).ToList();
+            return tasks.Select(t => t.Result);
         }
     }
 }
