@@ -51,12 +51,10 @@ namespace BandPageGenerator.Services
         {
             var photos = await this.client.GetAlbumAsync(this.config.AlbumId);
 
-            var list = photos.Select(p => p.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2)).ToList();
-
-            var download = list.Select(async item =>
+            var download = this.Flatten(photos).Select(async item =>
             {
                 item.Source = await this.downloader.DownloadFile(
-                    item.Source, Guid.NewGuid().ToString(), this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
+                    item.Source, item.Id, this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
                 return item;
             }).ToList();
 
@@ -77,12 +75,13 @@ namespace BandPageGenerator.Services
                 var image = p.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2);
                 return new FacebookMemberPhotoModel
                 {
+                    Id = p.Id,
                     Name = data[0],
                     Description = data[1],
                     Width = image.Width,
                     Height = image.Height,
                     Source = await this.downloader.DownloadFile(
-                        image.Source, Guid.NewGuid().ToString(), this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath)
+                        image.Source, p.Id, this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath)
                 };
             }).ToList();
 
@@ -98,13 +97,23 @@ namespace BandPageGenerator.Services
             var tasks = photos.Select(async p =>
             {
                 p.MediaUrl = await this.downloader.DownloadFile(
-                    p.MediaUrl, Guid.NewGuid().ToString(), this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
+                    p.MediaUrl, p.Id, this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
                 return p;
             }).ToList();
 
             await Task.WhenAll(tasks);
 
             return tasks.Select(t => t.Result).ToList();
+        }
+
+        private IEnumerable<FacebookPhotoModel> Flatten(List<FacebookAlbumPhotosModel> album)
+        {
+            return album.Select(item =>
+            {
+                var transformed = item.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2);
+                transformed.Id = item.Id;
+                return transformed;
+            });
         }
     }
 }
