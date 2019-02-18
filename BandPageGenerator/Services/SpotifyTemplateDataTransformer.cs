@@ -1,6 +1,5 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
-using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -9,22 +8,25 @@ using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
 {
-    public class SpotifyTemplateDataTransformer : ITemplateDataTransformer
+    public class SpotifyTemplateDataTransformer : AbstractTemplateDataTransformer
     {
         private readonly SpotifyClient client;
 
         private readonly SpotifyConfig config;
 
-        public SpotifyTemplateDataTransformer(SpotifyClient client, IOptions<SpotifyConfig> config)
+        public SpotifyTemplateDataTransformer(
+            SpotifyClient client, IOptions<SpotifyConfig> config, DownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
+            : base(downloader, generalConfig)
         {
             this.client = client;
             this.config = config.Value;
         }
 
-        public async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
+        public override async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
         {
             var albums = await this.client.GetAlbumsAsync();
-            templateData.Add("Albums", albums.Select(a => this.Map(a)).ToArray());
+            templateData.Add("Albums", 
+                await this.Replace(albums.Select(a => this.Map(a)), a => a.Image.Url, a => a.Id));
         }
 
         private SpotifyAlbumTemplateModel Map(SpotifyAlbumModel model)
