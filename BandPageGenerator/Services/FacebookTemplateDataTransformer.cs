@@ -30,7 +30,7 @@ namespace BandPageGenerator.Services
             var profilePictureUri = await this.client.GetProfilePictureAsync();
 
             templateData.Add("ProfilePictureUrl", await this.downloader.DownloadFile(
-                profilePictureUri, "profile", this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath));
+                profilePictureUri, "profile", this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath, true));
 
             var events = await this.client.GetPageEventsAsync();
             var upcomingEvents = events.Where(e => e.StartTime > DateTime.Now);

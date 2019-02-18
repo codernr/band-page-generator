@@ -18,7 +18,7 @@ namespace BandPageGenerator.Services
 
         public DownloaderClient(HttpClient client) => this.client = client;
 
-        public async Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath)
+        public async Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath, bool forceDownload = false)
         {
             var request = await this.client.GetAsync(requestUri);
 
@@ -30,13 +30,18 @@ namespace BandPageGenerator.Services
 
             Directory.CreateDirectory(savePath);
 
+            var filePath = Path.Combine(savePath, fileName);
+            var returnPath = Path.Combine(basePath, fileName);
+
+            if (File.Exists(filePath) && !forceDownload) return returnPath;
+
             using (var contentStream = await request.Content.ReadAsStreamAsync())
-            using (var fileStream = File.Create(Path.Combine(savePath, fileName)))
+            using (var fileStream = File.Create(filePath))
             {
                 await contentStream.CopyToAsync(fileStream);
             }
 
-            return Path.Combine(basePath, fileName);
+            return returnPath;
         }
     }
 }
