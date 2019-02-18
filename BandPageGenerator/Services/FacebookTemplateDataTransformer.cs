@@ -1,6 +1,5 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
-using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -9,24 +8,20 @@ using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
 {
-    public class FacebookTemplateDataTransformer : ITemplateDataTransformer
+    public class FacebookTemplateDataTransformer : AbstractTemplateDataTransformer
     {
         private readonly FacebookClient client;
         private readonly FacebookConfig config;
-        private readonly GeneralConfig generalConfig;
-        private readonly DownloaderClient downloader;
 
         public FacebookTemplateDataTransformer(
             FacebookClient client, IOptions<FacebookConfig> config, DownloaderClient downloader,
-            IOptions<GeneralConfig> generalConfig)
+            IOptions<GeneralConfig> generalConfig) : base(downloader, generalConfig)
         {
             this.client = client;
             this.config = config.Value;
-            this.generalConfig = generalConfig.Value;
-            this.downloader = downloader;
         }
 
-        public async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
+        public override async Task AddTemplateDataAsync(Dictionary<string, object> templateData)
         {
             // TODO: conditionally add instagram data
 
@@ -38,36 +33,27 @@ namespace BandPageGenerator.Services
                 profilePictureUri, "profile", this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath));
 
             var events = await this.client.GetPageEventsAsync();
+            var upcomingEvents = events.Where(e => e.StartTime > DateTime.Now);
+            var pastEvents = events.Where(e => e.StartTime < DateTime.Now).Take(this.config.PastEventDisplayLimit);
 
-            templateData.Add("UpcomingEvents", events.Where(e => e.StartTime > DateTime.Now).ToArray());
-            templateData.Add("PastEvents", events.Where(e => e.StartTime < DateTime.Now).ToArray().Take(this.config.PastEventDisplayLimit));
+            templateData.Add("UpcomingEvents", await this.Replace(upcomingEvents, e => e.Cover.Source, e => e.Cover.Id));
+            templateData.Add("PastEvents", await this.Replace(pastEvents, e => e.Cover.Source, e => e.Cover.Id));
 
-            templateData.Add("FeaturedPhotos", await this.GetFeaturedPhotosAsync());
-            templateData.Add("MemberPhotos", await this.GetMemberPhotosAsync());
-            templateData.Add("InstagramPhotos", await this.GetInstagramPhotos());
+            var featuredPhotos = this.Flatten(await this.client.GetAlbumAsync(this.config.AlbumId));
+            templateData.Add("FeaturedPhotos", await this.Replace(featuredPhotos, p => p.Source, p => p.Id));
+
+            var memberPhotos = await this.GetTransformedMemberPhotosAsync();
+            templateData.Add("MemberPhotos", await this.Replace(memberPhotos, p => p.Source, p => p.Id));
+
+            var instagramPhotos = await this.client.GetRecentInstagramPhotosAsync();
+            templateData.Add("InstagramPhotos", await this.Replace(instagramPhotos, p => p.MediaUrl, p => p.Id));
         }
 
-        private async Task<List<FacebookPhotoModel>> GetFeaturedPhotosAsync()
-        {
-            var photos = await this.client.GetAlbumAsync(this.config.AlbumId);
-
-            var download = this.Flatten(photos).Select(async item =>
-            {
-                item.Source = await this.downloader.DownloadFile(
-                    item.Source, item.Id, this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
-                return item;
-            }).ToList();
-
-            await Task.WhenAll(download);
-
-            return download.Select(t => t.Result).ToList();
-        }
-
-        private async Task<List<FacebookMemberPhotoModel>> GetMemberPhotosAsync()
+        private async Task<IEnumerable<FacebookMemberPhotoModel>> GetTransformedMemberPhotosAsync()
         {
             var photos = await this.client.GetAlbumAsync(this.config.MembersAlbumId);
 
-            var tasks = photos.Select(async p =>
+            return photos.Select(p =>
             {
                 var data = p.Name.Split('\n');
                 if (data.Length < 2) throw new FormatException("Member photos description has to have a new line in it!");
@@ -80,30 +66,9 @@ namespace BandPageGenerator.Services
                     Description = data[1],
                     Width = image.Width,
                     Height = image.Height,
-                    Source = await this.downloader.DownloadFile(
-                        image.Source, p.Id, this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath)
+                    Source = image.Source
                 };
-            }).ToList();
-
-            await Task.WhenAll(tasks);
-
-            return tasks.Select(t => t.Result).ToList();
-        }
-
-        private async Task<List<FacebookInstagramMediaModel>> GetInstagramPhotos()
-        {
-            var photos = await this.client.GetRecentInstagramPhotosAsync();
-
-            var tasks = photos.Select(async p =>
-            {
-                p.MediaUrl = await this.downloader.DownloadFile(
-                    p.MediaUrl, p.Id, this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
-                return p;
-            }).ToList();
-
-            await Task.WhenAll(tasks);
-
-            return tasks.Select(t => t.Result).ToList();
+            });
         }
 
         private IEnumerable<FacebookPhotoModel> Flatten(List<FacebookAlbumPhotosModel> album)
