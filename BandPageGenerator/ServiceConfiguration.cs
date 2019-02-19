@@ -43,7 +43,7 @@ namespace BandPageGenerator
         private static void ConfigureLogging(IServiceCollection serviceCollection)
         {
             serviceCollection.AddLogging(logging => logging
-                .AddConsole()
+                .AddConsole(options => options.IncludeScopes = true)
                 .AddFilter("System.Net.Http.HttpClient", LogLevel.Error));
         }
 

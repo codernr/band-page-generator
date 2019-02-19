@@ -1,4 +1,5 @@
 ﻿using BandPageGenerator.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,33 +16,50 @@ namespace BandPageGenerator.Services
         };
 
         private readonly HttpClient client;
+        private readonly ILogger<DownloaderClient> logger;
 
-        public DownloaderClient(HttpClient client) => this.client = client;
+        public DownloaderClient(HttpClient client, ILogger<DownloaderClient> logger)
+        {
+            this.client = client;
+            this.logger = logger;
+        }
 
         public async Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath, bool forceDownload = false)
         {
-            var request = await this.client.GetAsync(requestUri);
-
-            var contentType = request.Content.Headers.ContentType.ToString();
-
-            if (!acceptedTypes.ContainsKey(contentType)) throw new NotSupportedException($"{contentType} is not supported for download");
-
-            var fileName = $"{id}.{acceptedTypes[contentType]}";
-
-            Directory.CreateDirectory(savePath);
-
-            var filePath = Path.Combine(savePath, fileName);
-            var returnPath = Path.Combine(basePath, fileName);
-
-            if (File.Exists(filePath) && !forceDownload) return returnPath;
-
-            using (var contentStream = await request.Content.ReadAsStreamAsync())
-            using (var fileStream = File.Create(filePath))
+            using (this.logger.BeginScope("Download file with id {0}", id))
             {
-                await contentStream.CopyToAsync(fileStream);
-            }
+                this.logger.LogInformation("Downloading from {0}", requestUri);
+                var request = await this.client.GetAsync(requestUri);
 
-            return returnPath;
+                var contentType = request.Content.Headers.ContentType.ToString();
+
+                if (!acceptedTypes.ContainsKey(contentType))
+                {
+                    this.logger.LogCritical("Not supported content type: {0}", contentType);
+                    throw new NotSupportedException($"{contentType} is not supported for download");
+                }
+
+                var fileName = $"{id}.{acceptedTypes[contentType]}";
+
+                Directory.CreateDirectory(savePath);
+
+                var filePath = Path.Combine(savePath, fileName);
+                var returnPath = Path.Combine(basePath, fileName);
+
+                if (File.Exists(filePath) && !forceDownload)
+                {
+                    this.logger.LogWarning("The file {0} already exists, it is not saved again.", filePath);
+                    return returnPath;
+                }
+
+                using (var contentStream = await request.Content.ReadAsStreamAsync())
+                using (var fileStream = File.Create(filePath))
+                {
+                    await contentStream.CopyToAsync(fileStream);
+                }
+
+                return returnPath;
+            }
         }
     }
 }
