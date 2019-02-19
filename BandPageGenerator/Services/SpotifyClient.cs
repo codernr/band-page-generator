@@ -1,6 +1,7 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
 using BandPageGenerator.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -16,18 +17,25 @@ namespace BandPageGenerator.Services
     {
         private readonly SpotifyConfig config;
         private readonly IFormattedHttpClient client;
+        private readonly ILogger<SpotifyClient> logger;
         private const string apiUri = "https://api.spotify.com/v1/";
         private const string authUri = "https://accounts.spotify.com/api/token";
         private SpotifyClientCredentialsModel credentials;
 
-        public SpotifyClient(IOptions<SpotifyConfig> config, IJsonHttpClient<SnakeCaseNamingStrategy> client)
+        public SpotifyClient(
+            IOptions<SpotifyConfig> config,
+            IJsonHttpClient<SnakeCaseNamingStrategy> client,
+            ILogger<SpotifyClient> logger)
         {
             this.config = config.Value;
             this.client = client;
+            this.logger = logger;
         }
 
         public async Task<SpotifyAlbumModel[]> GetAlbumsAsync()
         {
+            this.logger.LogInformation("Retrieving album list...");
+
             var simpleAlbumsData = await this.GetPagedApiDataAsync<SpotifySimplifiedAlbumModel>(
                 $"artists/{this.config.ArtistId}/albums", ("include_groups", "album,single"));
 
@@ -77,6 +85,8 @@ namespace BandPageGenerator.Services
 
         private async Task<TModel> GetAuthorizedUriAsync<TModel>(string requestUri)
         {
+            this.logger.LogInformation("Querying Spotify API endpoint: {0}", requestUri);
+
             var credentials = await this.GetCredentialsAsync();
 
             var headers = new[] { ("Authorization", $"Bearer {credentials.AccessToken}") };
