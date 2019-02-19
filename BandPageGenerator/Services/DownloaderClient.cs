@@ -1,13 +1,13 @@
-﻿using System;
+﻿using BandPageGenerator.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
 {
-    public class DownloaderClient
+    public class DownloaderClient : IDownloaderClient
     {
         private static readonly Dictionary<string, string> acceptedTypes = new Dictionary<string, string>()
         {
