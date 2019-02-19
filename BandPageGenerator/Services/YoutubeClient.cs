@@ -1,6 +1,7 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
 using BandPageGenerator.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
@@ -12,16 +13,23 @@ namespace BandPageGenerator.Services
     {
         private readonly YoutubeConfig config;
         private readonly IFormattedHttpClient client;
+        private readonly ILogger<YoutubeClient> logger;
         private const string apiUri = "https://www.googleapis.com/youtube/v3/";
 
-        public YoutubeClient(IOptions<YoutubeConfig> config, IJsonHttpClient<CamelCaseNamingStrategy> client)
+        public YoutubeClient(
+            IOptions<YoutubeConfig> config,
+            IJsonHttpClient<CamelCaseNamingStrategy> client,
+            ILogger<YoutubeClient> logger)
         {
             this.config = config.Value;
             this.client = client;
+            this.logger = logger;
         }
 
         public async Task<long> GetCumulatedViewCount()
         {
+            this.logger.LogInformation("Retrieving view count for channel (id: {0})...", this.config.ChannelId);
+
             var channelViewData = await this.GetApiDataAsync<YoutubeDataWrapperModel<YoutubeDataModel>>(
                 "channels", ("part", "statistics"), ("id", this.config.ChannelId));
 
@@ -29,8 +37,12 @@ namespace BandPageGenerator.Services
 
             if (this.config.AdditionalVideoIds != null)
             {
+                var videoIds = string.Join(',', this.config.AdditionalVideoIds);
+
+                this.logger.LogInformation("Retrieving view count for videos (id: {0})...", videoIds);
+
                 var additionalViewData = await this.GetApiDataAsync<YoutubeDataWrapperModel<YoutubeDataModel>>(
-                    "videos", ("part", "statistics"), ("id", string.Join(',', this.config.AdditionalVideoIds)));
+                    "videos", ("part", "statistics"), ("id", videoIds));
 
                 viewCount += additionalViewData.Items.Sum(i => i.Statistics.ViewCount);
             }
@@ -40,6 +52,8 @@ namespace BandPageGenerator.Services
 
         public async Task<YoutubeVideoModel[]> GetFeaturedVideos()
         {
+            this.logger.LogInformation("Retrieving featured videos from playlist (id: {0})...", this.config.FeaturedPlaylistId);
+
             var data = await this.GetApiDataAsync<YoutubeDataWrapperModel<YoutubeSnippetModel>>(
                 "playlistItems", ("maxResults", "50"), ("playlistId", this.config.FeaturedPlaylistId), ("part", "snippet"));
 
@@ -53,6 +67,8 @@ namespace BandPageGenerator.Services
                 edge,
                 this.config.ApiKey,
                 parameters != null ? string.Join("", parameters.Select(i => $"&{i.Item1}={i.Item2}")) : string.Empty);
+
+            this.logger.LogInformation("Querying Youtube Data API endpoint: {0}", queryString);
 
             return this.client.GetAsync<TModel>(queryString);
         }
