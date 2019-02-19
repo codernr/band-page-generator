@@ -39,11 +39,11 @@ namespace BandPageGenerator.Services
             var simpleAlbumsData = await this.GetPagedApiDataAsync<SpotifySimplifiedAlbumModel>(
                 $"artists/{this.config.ArtistId}/albums", ("include_groups", "album,single"));
 
-            var albumTasks = simpleAlbumsData.Select(d => this.GetAuthorizedUriAsync<SpotifyAlbumModel>(d.Href));
+            var albumTasks = simpleAlbumsData.Select(d => this.GetAuthorizedUriAsync<SpotifyAlbumModel>(d.Href)).ToArray();
 
             await Task.WhenAll(albumTasks);
 
-            return albumTasks.Select(t => t.Result).ToArray();
+            return albumTasks.Select(t => t.Result).OrderByDescending(a => a.ReleaseDate).ToArray();
         }
 
         private async Task<SpotifyClientCredentialsModel> GetCredentialsAsync()
