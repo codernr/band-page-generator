@@ -1,4 +1,5 @@
-﻿using BandPageGenerator.Services.Interfaces;
+﻿using BandPageGenerator.Services;
+using BandPageGenerator.Services.Interfaces;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -47,6 +48,15 @@ namespace BandPageGenerator
             }
 
             logger.LogInformation("Rendering to file: " + this.OutputPath);
+
+            if (serviceProvider.GetRequiredService<IDownloaderClient>() is NullDownloaderClient)
+            {
+                logger.LogInformation("Image files are referenced directly from social pages");
+            }
+            else
+            {
+                logger.LogInformation("Image files are downloaded locally and served from site");
+            }
 
             RenderToFileAsync(
                 serviceProvider,
