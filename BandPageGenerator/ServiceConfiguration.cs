@@ -21,17 +21,13 @@ namespace BandPageGenerator
 
             serviceCollection.AddHttpClient<IJsonHttpClient<SnakeCaseNamingStrategy>, JsonHttpClient<SnakeCaseNamingStrategy>>();
             serviceCollection.AddHttpClient<IJsonHttpClient<CamelCaseNamingStrategy>, JsonHttpClient<CamelCaseNamingStrategy>>();
-            serviceCollection.AddHttpClient<DownloaderClient>();
 
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), settings), false)
                 .Build();
             serviceCollection.AddOptions();
 
-            serviceCollection.Configure<GeneralConfig>(generalConfig => {
-                generalConfig.DownloadedBasePath = configuration.GetSection("General")["DownloadedBasePath"];
-                generalConfig.DownloadSavePath = downloadSavePath;
-            });
+            ConfigureDownloaderService(serviceCollection, downloadSavePath, configuration);
 
             AddProviderServices<FacebookConfig, FacebookClient, FacebookTemplateDataTransformer>(
                 "Facebook", configuration, serviceCollection);
@@ -54,6 +50,26 @@ namespace BandPageGenerator
             collection.Configure<TConfig>(section);
             collection.AddSingleton<TClient>();
             collection.AddSingleton<ITemplateDataTransformer, TTemplateDataTransformer>();
+        }
+
+        private static void ConfigureDownloaderService(
+            IServiceCollection serviceCollection, string downloadSavePath, IConfigurationRoot configuration)
+        {
+            var configSection = configuration.GetSection("General");
+            var downloadedBasePath = configSection["DownloadedBasePath"];
+
+            if (downloadSavePath == null || configSection == null || downloadedBasePath == null)
+            {
+                serviceCollection.AddSingleton<IDownloaderClient, NullDownloaderClient>();
+                return;
+            }
+
+            serviceCollection.Configure<GeneralConfig>(generalConfig => {
+                generalConfig.DownloadedBasePath = downloadedBasePath;
+                generalConfig.DownloadSavePath = downloadSavePath;
+            });
+
+            serviceCollection.AddHttpClient<IDownloaderClient, DownloaderClient>();
         }
     }
 }

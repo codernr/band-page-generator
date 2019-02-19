@@ -1,5 +1,6 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
+using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BandPageGenerator.Services
     {
         private readonly YoutubeClient client;
 
-        public YoutubeTemplateDataTransformer(YoutubeClient client, DownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
+        public YoutubeTemplateDataTransformer(YoutubeClient client, IDownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
             : base(downloader, generalConfig) => this.client = client;
 
         public override async Task AddTemplateDataAsync(Dictionary<string, object> templateData)

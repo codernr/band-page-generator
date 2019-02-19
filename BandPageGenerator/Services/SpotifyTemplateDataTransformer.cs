@@ -1,5 +1,6 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
+using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace BandPageGenerator.Services
         private readonly SpotifyConfig config;
 
         public SpotifyTemplateDataTransformer(
-            SpotifyClient client, IOptions<SpotifyConfig> config, DownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
+            SpotifyClient client, IOptions<SpotifyConfig> config, IDownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
             : base(downloader, generalConfig)
         {
             this.client = client;

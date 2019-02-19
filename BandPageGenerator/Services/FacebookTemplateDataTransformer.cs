@@ -1,5 +1,6 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
+using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace BandPageGenerator.Services
         private readonly FacebookConfig config;
 
         public FacebookTemplateDataTransformer(
-            FacebookClient client, IOptions<FacebookConfig> config, DownloaderClient downloader,
+            FacebookClient client, IOptions<FacebookConfig> config, IDownloaderClient downloader,
             IOptions<GeneralConfig> generalConfig) : base(downloader, generalConfig)
         {
             this.client = client;
