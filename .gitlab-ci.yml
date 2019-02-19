@@ -7,7 +7,10 @@ stages:
 test:
   stage: test
   script: 
-  - dotnet test
+  - "dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover"
+  - "curl -s https://codecov.io/bash > codecov"
+  - chmod +x codecov
+  - ./codecov -f "Tests/coverage.opencover.xml" -t $CODECOV_UPLOAD_TOKEN
   only:
   - develop
   - master
