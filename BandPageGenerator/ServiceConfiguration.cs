@@ -16,8 +16,9 @@ namespace BandPageGenerator
         public static IServiceProvider ConfigureServiceProvider(string settings, string downloadSavePath)
         {
             var serviceCollection = new ServiceCollection()
-                .AddLogging(logging => logging.AddConsole())
                 .AddSingleton<IViewRenderer, HandlebarsViewRenderer>();
+
+            ConfigureLogging(serviceCollection);
 
             serviceCollection.AddHttpClient<IJsonHttpClient<SnakeCaseNamingStrategy>, JsonHttpClient<SnakeCaseNamingStrategy>>();
             serviceCollection.AddHttpClient<IJsonHttpClient<CamelCaseNamingStrategy>, JsonHttpClient<CamelCaseNamingStrategy>>();
@@ -37,6 +38,13 @@ namespace BandPageGenerator
                 "Spotify", configuration, serviceCollection);
 
             return serviceCollection.BuildServiceProvider();
+        }
+
+        private static void ConfigureLogging(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddLogging(logging => logging
+                .AddConsole()
+                .AddFilter("System.Net.Http.HttpClient", LogLevel.Error));
         }
 
         private static void AddProviderServices<TConfig, TClient, TTemplateDataTransformer>

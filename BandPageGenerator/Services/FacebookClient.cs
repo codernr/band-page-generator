@@ -1,6 +1,7 @@
 ﻿using BandPageGenerator.Config;
 using BandPageGenerator.Models;
 using BandPageGenerator.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
@@ -13,23 +14,31 @@ namespace BandPageGenerator.Services
     {
         private readonly FacebookConfig config;
         private readonly IFormattedHttpClient client;
+        private readonly ILogger<FacebookClient> logger;
 
-        public FacebookClient(IOptions<FacebookConfig> config, IJsonHttpClient<SnakeCaseNamingStrategy> client)
+        public FacebookClient(IOptions<FacebookConfig> config, IJsonHttpClient<SnakeCaseNamingStrategy> client, ILogger<FacebookClient> logger)
         {
             this.config = config.Value;
             this.client = client;
+            this.logger = logger;
         }
 
         public async Task<int> GetPageLikeCountAsync()
         {
+            this.logger.LogInformation("Retrieving facebook fan count...");
+
             var data = await this.GetGraphDataAsync<FacebookFanCountModel>(
                 this.config.PageId, new[] { "fan_count" });
+
+            this.logger.LogInformation("Fan count: {0}", data.FanCount);
 
             return data.FanCount;
         }
 
         public Task<List<FacebookEventModel>> GetPageEventsAsync()
         {
+            this.logger.LogInformation("Retrieving page events...");
+
             return this.GetPagedGraphDataAsync<FacebookEventModel>(
                 $"{this.config.PageId}/events",
                 new[] { "cover", "category", "description", "end_time", "name", "place", "start_time", "ticket_uri" },
@@ -41,12 +50,16 @@ namespace BandPageGenerator.Services
         /// </summary>
         public async Task<List<FacebookAlbumPhotosModel>> GetAlbumAsync(string albumId)
         {
+            this.logger.LogInformation("Retrieving album photos (album id: {0}) ...", albumId);
+
             return await this.GetPagedGraphDataAsync<FacebookAlbumPhotosModel>(
                 $"{albumId}/photos", new[] { "images", "link", "name" });
         }
 
         public async Task<FacebookInstagramMediaModel[]> GetRecentInstagramPhotosAsync()
         {
+            this.logger.LogInformation("Retrieving Instagram recent photos...");
+
             var media = await this.GetGraphDataAsync<FacebookListModel<FacebookInstagramMediaModel>>(
                 $"{this.config.InstagramId}/media", new[] { "media_type", "media_url", "caption", "permalink", "timestamp" });
 
@@ -60,6 +73,8 @@ namespace BandPageGenerator.Services
 
         public async Task<string> GetProfilePictureAsync()
         {
+            this.logger.LogInformation("Retrieving profile picture...");
+
             var data = await this.GetGraphDataAsync<FacebookDataModel<FacebookProfilePictureModel>>(
                 $"{this.config.PageId}/picture", new[] { "url" }, new[] { ("redirect", "0"), ("width", "1200") });
 
@@ -95,6 +110,8 @@ namespace BandPageGenerator.Services
 
                 queryString += filterString;
             }
+
+            this.logger.LogInformation("Querying Graph API endpoint: {0}", queryString);
 
             return this.client.GetAsync<TModel>(queryString);
         }
