@@ -28,10 +28,7 @@ namespace BandPageGenerator.Services
         {
             using (this.logger.BeginScope("Download file with id {0}", id))
             {
-                this.logger.LogInformation("Downloading from {0}", requestUri);
-                var request = await this.client.GetAsync(requestUri);
-
-                var contentType = request.Content.Headers.ContentType.ToString();
+                var contentType = await this.GetContentTypeAsync(requestUri);
 
                 if (!acceptedTypes.ContainsKey(contentType))
                 {
@@ -52,6 +49,10 @@ namespace BandPageGenerator.Services
                     return returnPath;
                 }
 
+                this.logger.LogInformation("Downloading from {0}", requestUri);
+
+                var request = await this.client.GetAsync(requestUri);
+
                 using (var contentStream = await request.Content.ReadAsStreamAsync())
                 using (var fileStream = File.Create(filePath))
                 {
@@ -60,6 +61,15 @@ namespace BandPageGenerator.Services
 
                 return returnPath;
             }
+        }
+
+        private async Task<string> GetContentTypeAsync(string requestUri)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Head, requestUri);
+
+            var response = await this.client.SendAsync(request);
+
+            return response.Content.Headers.ContentType.ToString();
         }
     }
 }
