@@ -53,7 +53,10 @@ namespace BandPageGenerator
         {
             var section = configuration.GetChildren().FirstOrDefault(s => s.Key == key);
 
-            if (section == null) return;
+            if (section == null)
+            {
+                return;
+            }
 
             collection.Configure<TConfig>(section);
             collection.AddSingleton<TClient>();

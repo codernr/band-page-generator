@@ -18,9 +18,9 @@ namespace Tests
         [Fact]
         public async Task ShouldNotThrow()
         {
-            var client = this.CreateClient(new FacebookFanCountModel { FanCount = 3 });
+            var client = CreateClient(new FacebookFanCountModel { FanCount = 3 });
 
-            var options = this.CreateOptions(new FacebookConfig());
+            var options = CreateOptions(new FacebookConfig());
 
             var graph = new FacebookClient(options.Object, client.Object, LoggerMock);
 
@@ -32,12 +32,12 @@ namespace Tests
         [Fact]
         public async Task ShouldReturnArray()
         {
-            var client = this.CreateClient(new FacebookListModel<FacebookEventModel>
+            var client = CreateClient(new FacebookListModel<FacebookEventModel>
             {
                 Data = new[] { new FacebookEventModel(), new FacebookEventModel() }
             });
 
-            var options = this.CreateOptions(new FacebookConfig());
+            var options = CreateOptions(new FacebookConfig());
 
             var graph = new FacebookClient(options.Object, client.Object, LoggerMock);
 
@@ -49,7 +49,7 @@ namespace Tests
         [Fact]
         public async Task ShouldReturnAlbumList()
         {
-            var client = this.CreateClient(new FacebookListModel<FacebookAlbumPhotosModel>
+            var client = CreateClient(new FacebookListModel<FacebookAlbumPhotosModel>
             {
                 Data = new[]
                 {
@@ -64,7 +64,7 @@ namespace Tests
                 }
             });
 
-            var options = this.CreateOptions(new FacebookConfig());
+            var options = CreateOptions(new FacebookConfig());
 
             var graph = new FacebookClient(options.Object, client.Object, LoggerMock);
 
@@ -91,7 +91,7 @@ namespace Tests
                     Data = new[] { new FacebookEventModel() }
                 });
 
-            var options = this.CreateOptions(new FacebookConfig());
+            var options = CreateOptions(new FacebookConfig());
 
             var graph = new FacebookClient(options.Object, client.Object, LoggerMock);
 
@@ -103,12 +103,12 @@ namespace Tests
         [Fact]
         public async Task ShouldFilterInstagramImages()
         {
-            var client = this.CreateClient(new FacebookListModel<FacebookInstagramMediaModel> { Data = new[] {
+            var client = CreateClient(new FacebookListModel<FacebookInstagramMediaModel> { Data = new[] {
                 new FacebookInstagramMediaModel { MediaType = "IMAGE" },
                 new FacebookInstagramMediaModel { MediaType = "VIDEO" }
             }});
 
-            var options = this.CreateOptions(new FacebookConfig());
+            var options = CreateOptions(new FacebookConfig());
 
             var facebookClient = new FacebookClient(options.Object, client.Object, LoggerMock);
 
@@ -120,7 +120,7 @@ namespace Tests
         [Fact]
         public async Task ShouldFilterInstagramImageHashtags()
         {
-            var client = this.CreateClient(new FacebookListModel<FacebookInstagramMediaModel>
+            var client = CreateClient(new FacebookListModel<FacebookInstagramMediaModel>
             {
                 Data = new[] {
                 new FacebookInstagramMediaModel { MediaType = "IMAGE", Caption = "no hashtag" },
@@ -130,7 +130,7 @@ namespace Tests
             }
             });
 
-            var options = this.CreateOptions(new FacebookConfig { FilterHashtags = new[] { "#hashtag1", "#hashtag2" } });
+            var options = CreateOptions(new FacebookConfig { FilterHashtags = new[] { "#hashtag1", "#hashtag2" } });
 
             var facebookClient = new FacebookClient(options.Object, client.Object, LoggerMock);
 
@@ -140,7 +140,7 @@ namespace Tests
             Assert.Contains("#hashtag2", response[0].Caption);
         }
 
-        private Mock<IJsonHttpClient<SnakeCaseNamingStrategy>> CreateClient<TModel>(TModel returnValue)
+        private static Mock<IJsonHttpClient<SnakeCaseNamingStrategy>> CreateClient<TModel>(TModel returnValue)
         {
             var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
             client.Setup(c => c.GetAsync<TModel>(It.IsAny<string>()))
@@ -148,7 +148,7 @@ namespace Tests
             return client;
         }
 
-        private Mock<IOptions<FacebookConfig>> CreateOptions(FacebookConfig returnValue)
+        private static Mock<IOptions<FacebookConfig>> CreateOptions(FacebookConfig returnValue)
         {
             var options = new Mock<IOptions<FacebookConfig>>();
             options.Setup(o => o.Value).Returns(returnValue);
