@@ -24,7 +24,12 @@ namespace BandPageGenerator.Services
             this.logger = logger;
         }
 
-        public async Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath, bool forceDownload = false)
+        public Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath)
+        {
+            return this.DownloadFile(requestUri, id, savePath, basePath, false);
+        }
+
+        public async Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath, bool forceDownload)
         {
             using (this.logger.BeginScope("Download file with id {0}", id))
             {

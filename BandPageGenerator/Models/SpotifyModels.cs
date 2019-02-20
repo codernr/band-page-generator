@@ -32,7 +32,7 @@ namespace BandPageGenerator.Models
 
         public string Name { get; set; }
         
-        public string Type;
+        public string Type { get; set; }
     }
 
     public class SpotifyAlbumModel : SpotifyAlbumBaseModel

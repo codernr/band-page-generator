@@ -40,7 +40,7 @@ namespace BandPageGenerator.Services
             templateData.Add("UpcomingEvents", await this.Replace(upcomingEvents, e => e.Cover.Source, e => e.Cover.Id));
             templateData.Add("PastEvents", await this.Replace(pastEvents, e => e.Cover.Source, e => e.Cover.Id));
 
-            var featuredPhotos = this.Flatten(await this.client.GetAlbumAsync(this.config.AlbumId));
+            var featuredPhotos = Flatten(await this.client.GetAlbumAsync(this.config.AlbumId));
             templateData.Add("FeaturedPhotos", await this.Replace(featuredPhotos, p => p.Source, p => p.Id));
 
             var memberPhotos = await this.GetTransformedMemberPhotosAsync();
@@ -72,7 +72,7 @@ namespace BandPageGenerator.Services
             });
         }
 
-        private IEnumerable<FacebookPhotoModel> Flatten(List<FacebookAlbumPhotosModel> album)
+        private static IEnumerable<FacebookPhotoModel> Flatten(List<FacebookAlbumPhotosModel> album)
         {
             return album.Select(item =>
             {

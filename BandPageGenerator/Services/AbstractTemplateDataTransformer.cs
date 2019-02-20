@@ -14,7 +14,7 @@ namespace BandPageGenerator.Services
         protected readonly IDownloaderClient downloader;
         protected readonly GeneralConfig generalConfig;
 
-        public AbstractTemplateDataTransformer(IDownloaderClient downloader, IOptions<GeneralConfig> config)
+        protected AbstractTemplateDataTransformer(IDownloaderClient downloader, IOptions<GeneralConfig> config)
         {
             this.downloader = downloader;
             this.generalConfig = config.Value;

@@ -49,11 +49,30 @@ namespace BandPageGenerator.Models
         {
             var list = new List<YoutubeThumbnailModel>();
 
-            if (this.Default != null) list.Add(this.Default);
-            if (this.Medium != null) list.Add(this.Medium);
-            if (this.High != null) list.Add(this.High);
-            if (this.Standard != null) list.Add(this.Standard);
-            if (this.Maxres != null) list.Add(this.Maxres);
+            if (this.Default != null)
+            {
+                list.Add(this.Default);
+            }
+
+            if (this.Medium != null)
+            {
+                list.Add(this.Medium);
+            }
+
+            if (this.High != null)
+            {
+                list.Add(this.High);
+            }
+
+            if (this.Standard != null)
+            {
+                list.Add(this.Standard);
+            }
+
+            if (this.Maxres != null)
+            {
+                list.Add(this.Maxres);
+            }
 
             return list;
         }
