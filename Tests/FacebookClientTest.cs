@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Newtonsoft.Json.Serialization;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -15,7 +16,7 @@ namespace Tests
         private static ILogger<FacebookClient> LoggerMock => Mock.Of<ILogger<FacebookClient>>();
 
         [Fact]
-        public async void ShouldNotThrow()
+        public async Task ShouldNotThrow()
         {
             var client = this.CreateClient(new FacebookFanCountModel { FanCount = 3 });
 
@@ -29,7 +30,7 @@ namespace Tests
         }
 
         [Fact]
-        public async void ShouldReturnArray()
+        public async Task ShouldReturnArray()
         {
             var client = this.CreateClient(new FacebookListModel<FacebookEventModel>
             {
@@ -46,7 +47,7 @@ namespace Tests
         }
 
         [Fact]
-        public async void ShouldReturnAlbumList()
+        public async Task ShouldReturnAlbumList()
         {
             var client = this.CreateClient(new FacebookListModel<FacebookAlbumPhotosModel>
             {
@@ -75,7 +76,7 @@ namespace Tests
         }
 
         [Fact]
-        public async void ShouldReturnAllPagesOfData()
+        public async Task ShouldReturnAllPagesOfData()
         {
             var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
             client.Setup(c => c.GetAsync<FacebookListModel<FacebookEventModel>>(It.IsNotIn("nextPage")))
@@ -100,7 +101,7 @@ namespace Tests
         }
 
         [Fact]
-        public async void ShouldFilterInstagramImages()
+        public async Task ShouldFilterInstagramImages()
         {
             var client = this.CreateClient(new FacebookListModel<FacebookInstagramMediaModel> { Data = new[] {
                 new FacebookInstagramMediaModel { MediaType = "IMAGE" },
@@ -117,7 +118,7 @@ namespace Tests
         }
 
         [Fact]
-        public async void ShouldFilterInstagramImageHashtags()
+        public async Task ShouldFilterInstagramImageHashtags()
         {
             var client = this.CreateClient(new FacebookListModel<FacebookInstagramMediaModel>
             {

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -16,7 +17,7 @@ namespace Tests
         private static ILogger<YoutubeClient> LoggerMock => Mock.Of<ILogger<YoutubeClient>>();
 
         [Fact]
-        public async void ShouldReturnNumber()
+        public async Task ShouldReturnNumber()
         {
             var client = new Mock<IJsonHttpClient<CamelCaseNamingStrategy>>();
 
@@ -40,7 +41,7 @@ namespace Tests
         }
 
         [Fact]
-        public async void ShouldTranslateToFlattenedItemCorrectly()
+        public async Task ShouldTranslateToFlattenedItemCorrectly()
         {
             var client = new Mock<IJsonHttpClient<CamelCaseNamingStrategy>>();
 

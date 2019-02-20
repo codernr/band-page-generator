@@ -8,6 +8,7 @@ using Moq;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -17,7 +18,7 @@ namespace Tests
         private static ILogger<SpotifyClient> LoggerMock => Mock.Of<ILogger<SpotifyClient>>();
 
         [Fact]
-        public async void ShouldReturnCorrectAlbums()
+        public async Task ShouldReturnCorrectAlbums()
         {
             var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
 
