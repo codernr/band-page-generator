@@ -25,7 +25,10 @@ namespace BandPageGenerator.Models
         {
             get
             {
-                if (this.Description == null) return null;
+                if (this.Description == null)
+                {
+                    return null;
+                }
 
                 var br = this.Description.Replace("\n", "<br/>");
 

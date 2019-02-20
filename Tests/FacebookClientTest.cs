@@ -12,7 +12,7 @@ namespace Tests
 {
     public class FacebookClientTest
     {
-        private ILogger<FacebookClient> LoggerMock => Mock.Of<ILogger<FacebookClient>>();
+        private static ILogger<FacebookClient> LoggerMock => Mock.Of<ILogger<FacebookClient>>();
 
         [Fact]
         public async void ShouldNotThrow()
@@ -21,7 +21,7 @@ namespace Tests
 
             var options = this.CreateOptions(new FacebookConfig());
 
-            var graph = new FacebookClient(options.Object, client.Object, this.LoggerMock);
+            var graph = new FacebookClient(options.Object, client.Object, LoggerMock);
 
             var value = await graph.GetPageLikeCountAsync();
 
@@ -38,7 +38,7 @@ namespace Tests
 
             var options = this.CreateOptions(new FacebookConfig());
 
-            var graph = new FacebookClient(options.Object, client.Object, this.LoggerMock);
+            var graph = new FacebookClient(options.Object, client.Object, LoggerMock);
 
             var response = await graph.GetPageEventsAsync();
 
@@ -65,7 +65,7 @@ namespace Tests
 
             var options = this.CreateOptions(new FacebookConfig());
 
-            var graph = new FacebookClient(options.Object, client.Object, this.LoggerMock);
+            var graph = new FacebookClient(options.Object, client.Object, LoggerMock);
 
             var photos = await graph.GetAlbumAsync("aaa");
 
@@ -92,7 +92,7 @@ namespace Tests
 
             var options = this.CreateOptions(new FacebookConfig());
 
-            var graph = new FacebookClient(options.Object, client.Object, this.LoggerMock);
+            var graph = new FacebookClient(options.Object, client.Object, LoggerMock);
 
             var response = await graph.GetPageEventsAsync();
 
@@ -109,7 +109,7 @@ namespace Tests
 
             var options = this.CreateOptions(new FacebookConfig());
 
-            var facebookClient = new FacebookClient(options.Object, client.Object, this.LoggerMock);
+            var facebookClient = new FacebookClient(options.Object, client.Object, LoggerMock);
 
             var response = await facebookClient.GetRecentInstagramPhotosAsync();
 
@@ -131,7 +131,7 @@ namespace Tests
 
             var options = this.CreateOptions(new FacebookConfig { FilterHashtags = new[] { "#hashtag1", "#hashtag2" } });
 
-            var facebookClient = new FacebookClient(options.Object, client.Object, this.LoggerMock);
+            var facebookClient = new FacebookClient(options.Object, client.Object, LoggerMock);
 
             var response = await facebookClient.GetRecentInstagramPhotosAsync();
 

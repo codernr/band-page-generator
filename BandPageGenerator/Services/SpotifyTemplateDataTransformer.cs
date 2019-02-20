@@ -38,7 +38,7 @@ namespace BandPageGenerator.Services
                 Id = model.Id,
                 Label = model.Label,
                 Name = model.Name,
-                ReleaseDate = this.MapReleaseDate(model.ReleaseDate, model.ReleaseDatePrecision),
+                ReleaseDate = MapReleaseDate(model.ReleaseDate, model.ReleaseDatePrecision),
                 Type = model.Type,
                 Image = model.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2),
                 Tracks = model.Tracks.Items.OrderBy(t => t.TrackNumber).ToArray(),
@@ -47,9 +47,12 @@ namespace BandPageGenerator.Services
             };
         }
 
-        private DateTime? MapReleaseDate(string releaseDate, string releaseDatePrecision)
+        private static DateTime? MapReleaseDate(string releaseDate, string releaseDatePrecision)
         {
-            if (string.IsNullOrEmpty(releaseDate)) return null;
+            if (string.IsNullOrEmpty(releaseDate))
+            {
+                return null;
+            }
 
             var parts = releaseDate.Split('-');
 

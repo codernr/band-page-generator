@@ -71,7 +71,9 @@ namespace BandPageGenerator
             var templateData = new Dictionary<string, object>();
 
             foreach (var clientService in serviceProvider.GetServices<ITemplateDataTransformer>())
+            {
                 await clientService.AddTemplateDataAsync(templateData);
+            }
 
             await File.WriteAllTextAsync(outputPath, await renderer.RenderViewToStringAsync(templatePath, templateData), new UTF8Encoding(false));
         }

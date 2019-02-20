@@ -13,7 +13,7 @@ namespace Tests
 {
     public class YoutubeClientTest
     {
-        private ILogger<YoutubeClient> LoggerMock => Mock.Of<ILogger<YoutubeClient>>();
+        private static ILogger<YoutubeClient> LoggerMock => Mock.Of<ILogger<YoutubeClient>>();
 
         [Fact]
         public async void ShouldReturnNumber()
@@ -32,7 +32,7 @@ namespace Tests
             var options = new Mock<IOptions<YoutubeConfig>>();
             options.Setup(o => o.Value).Returns(new YoutubeConfig());
 
-            var youtubeClient = new YoutubeClient(options.Object, client.Object, this.LoggerMock);
+            var youtubeClient = new YoutubeClient(options.Object, client.Object, LoggerMock);
 
             var data = await youtubeClient.GetCumulatedViewCount();
 
@@ -62,7 +62,7 @@ namespace Tests
             var options = new Mock<IOptions<YoutubeConfig>>();
             options.Setup(o => o.Value).Returns(new YoutubeConfig());
 
-            var youtubeClient = new YoutubeClient(options.Object, client.Object, this.LoggerMock);
+            var youtubeClient = new YoutubeClient(options.Object, client.Object, LoggerMock);
 
             var data = await youtubeClient.GetFeaturedVideos();
 

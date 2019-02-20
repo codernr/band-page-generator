@@ -14,7 +14,7 @@ namespace Tests
 {
     public class SpotifyClientTest
     {
-        private ILogger<SpotifyClient> LoggerMock => Mock.Of<ILogger<SpotifyClient>>();
+        private static ILogger<SpotifyClient> LoggerMock => Mock.Of<ILogger<SpotifyClient>>();
 
         [Fact]
         public async void ShouldReturnCorrectAlbums()
@@ -44,7 +44,7 @@ namespace Tests
             var options = new Mock<IOptions<SpotifyConfig>>();
             options.Setup(o => o.Value).Returns(new SpotifyConfig());
 
-            var spotifyClient = new SpotifyClient(options.Object, client.Object, this.LoggerMock);
+            var spotifyClient = new SpotifyClient(options.Object, client.Object, LoggerMock);
 
             var results = await spotifyClient.GetAlbumsAsync();
 
