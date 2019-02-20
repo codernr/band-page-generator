@@ -48,7 +48,10 @@ namespace BandPageGenerator.Services
 
         private async Task<SpotifyClientCredentialsModel> GetCredentialsAsync()
         {
-            if (this.credentials != null) return this.credentials;
+            if (this.credentials != null)
+            {
+                return this.credentials;
+            }
 
             var content = new FormUrlEncodedContent(new[]
             {

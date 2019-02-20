@@ -6,6 +6,6 @@ namespace BandPageGenerator.Services.Interfaces
     {
         Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath);
 
-        Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath, bool forceDownload = false);
+        Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath, bool forceDownload);
     }
 }

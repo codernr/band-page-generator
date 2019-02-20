@@ -10,7 +10,7 @@ namespace BandPageGenerator.Services
 {
     public class DownloaderClient : IDownloaderClient
     {
-        private static readonly Dictionary<string, string> acceptedTypes = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> acceptedTypes = new Dictionary<string, string>
         {
             { "image/jpeg", "jpg" }
         };

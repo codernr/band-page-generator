@@ -57,7 +57,10 @@ namespace BandPageGenerator.Services
             return photos.Select(p =>
             {
                 var data = p.Name.Split('\n');
-                if (data.Length < 2) throw new FormatException("Member photos description has to have a new line in it!");
+                if (data.Length < 2)
+                {
+                    throw new FormatException("Member photos description has to have a new line in it!");
+                }
 
                 var image = p.Images.Aggregate((i1, i2) => i1.Height > i2.Height ? i1 : i2);
                 return new FacebookMemberPhotoModel

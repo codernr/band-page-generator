@@ -10,7 +10,7 @@ namespace BandPageGenerator.Services
             return this.DownloadFile(requestUri, id, savePath, basePath, false);
         }
 
-        public Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath, bool forceDownload = false)
+        public Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath, bool forceDownload)
         {
             return Task.FromResult(requestUri);
         }

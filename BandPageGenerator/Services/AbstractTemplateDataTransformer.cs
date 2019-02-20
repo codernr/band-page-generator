@@ -34,12 +34,8 @@ namespace BandPageGenerator.Services
 
             var tasks = data.Select(async target =>
             {
-                var url = memberLambda.Compile()(target);
-
-                var id = idLambda.Compile()(target);
-
                 var newValue = await this.downloader.DownloadFile(
-                            url, id, this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
+                            urlGetter(target), idGetter(target), this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath);
 
                 urlSetter(target, newValue);
 

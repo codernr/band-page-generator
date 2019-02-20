@@ -12,8 +12,8 @@ namespace BandPageGenerator.Services
     {
         public HandlebarsViewRenderer()
         {
-            Handlebars.RegisterHelper("date", this.DateFormatter);
-            Handlebars.RegisterHelper("interval", this.IntervalFormatter);
+            Handlebars.RegisterHelper("date", DateFormatter);
+            Handlebars.RegisterHelper("interval", IntervalFormatter);
         }
 
         public async Task<string> RenderViewToStringAsync<TModel>(string filePath, TModel model)
@@ -25,7 +25,7 @@ namespace BandPageGenerator.Services
             return compiled(model);
         }
 
-        private void DateFormatter(TextWriter output, dynamic context, params object[] arguments)
+        private static void DateFormatter(TextWriter output, dynamic context, params object[] arguments)
         {
             CheckArguments<DateTime>("date", arguments);
 
@@ -35,7 +35,7 @@ namespace BandPageGenerator.Services
             output.WriteSafeString(date.ToString(format, CultureInfo.InvariantCulture));
         }
 
-        private void IntervalFormatter(TextWriter output, dynamic context, params object[] arguments)
+        private static void IntervalFormatter(TextWriter output, dynamic context, params object[] arguments)
         {
             CheckArguments<TimeSpan>("interval", arguments);
 
