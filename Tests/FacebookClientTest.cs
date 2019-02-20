@@ -16,7 +16,7 @@ namespace Tests
         private static ILogger<FacebookClient> LoggerMock => Mock.Of<ILogger<FacebookClient>>();
 
         [Fact]
-        public async Task ShouldNotThrow()
+        public static async Task ShouldNotThrow()
         {
             var client = CreateClient(new FacebookFanCountModel { FanCount = 3 });
 
@@ -30,7 +30,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ShouldReturnArray()
+        public static async Task ShouldReturnArray()
         {
             var client = CreateClient(new FacebookListModel<FacebookEventModel>
             {
@@ -47,7 +47,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ShouldReturnAlbumList()
+        public static async Task ShouldReturnAlbumList()
         {
             var client = CreateClient(new FacebookListModel<FacebookAlbumPhotosModel>
             {
@@ -76,7 +76,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ShouldReturnAllPagesOfData()
+        public static async Task ShouldReturnAllPagesOfData()
         {
             var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
             client.Setup(c => c.GetAsync<FacebookListModel<FacebookEventModel>>(It.IsNotIn("nextPage")))
@@ -101,7 +101,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ShouldFilterInstagramImages()
+        public static async Task ShouldFilterInstagramImages()
         {
             var client = CreateClient(new FacebookListModel<FacebookInstagramMediaModel> { Data = new[] {
                 new FacebookInstagramMediaModel { MediaType = "IMAGE" },
@@ -118,7 +118,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ShouldFilterInstagramImageHashtags()
+        public static async Task ShouldFilterInstagramImageHashtags()
         {
             var client = CreateClient(new FacebookListModel<FacebookInstagramMediaModel>
             {

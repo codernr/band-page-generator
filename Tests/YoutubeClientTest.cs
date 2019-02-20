@@ -17,7 +17,7 @@ namespace Tests
         private static ILogger<YoutubeClient> LoggerMock => Mock.Of<ILogger<YoutubeClient>>();
 
         [Fact]
-        public async Task ShouldReturnNumber()
+        public static async Task ShouldReturnNumber()
         {
             var client = new Mock<IJsonHttpClient<CamelCaseNamingStrategy>>();
 
@@ -41,7 +41,7 @@ namespace Tests
         }
 
         [Fact]
-        public async Task ShouldTranslateToFlattenedItemCorrectly()
+        public static async Task ShouldTranslateToFlattenedItemCorrectly()
         {
             var client = new Mock<IJsonHttpClient<CamelCaseNamingStrategy>>();
 

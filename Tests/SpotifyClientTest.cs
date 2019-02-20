@@ -18,7 +18,7 @@ namespace Tests
         private static ILogger<SpotifyClient> LoggerMock => Mock.Of<ILogger<SpotifyClient>>();
 
         [Fact]
-        public async Task ShouldReturnCorrectAlbums()
+        public static async Task ShouldReturnCorrectAlbums()
         {
             var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
 
