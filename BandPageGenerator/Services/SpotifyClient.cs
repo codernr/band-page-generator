@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
 {
-    public class SpotifyClient
+    public class SpotifyClient : ISpotifyClient
     {
         private readonly SpotifyConfig config;
         private readonly IFormattedHttpClient client;

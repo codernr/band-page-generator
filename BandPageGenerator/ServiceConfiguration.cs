@@ -30,11 +30,11 @@ namespace BandPageGenerator
 
             ConfigureDownloaderService(serviceCollection, downloadSavePath, configuration);
 
-            AddProviderServices<FacebookConfig, FacebookClient, FacebookTemplateDataTransformer>(
+            AddProviderServices<FacebookConfig, IFacebookClient, FacebookClient, FacebookTemplateDataTransformer>(
                 "Facebook", configuration, serviceCollection);
-            AddProviderServices<YoutubeConfig, YoutubeClient, YoutubeTemplateDataTransformer>(
+            AddProviderServices<YoutubeConfig, IYoutubeClient, YoutubeClient, YoutubeTemplateDataTransformer>(
                 "Youtube", configuration, serviceCollection);
-            AddProviderServices<SpotifyConfig, SpotifyClient, SpotifyTemplateDataTransformer>(
+            AddProviderServices<SpotifyConfig, ISpotifyClient, SpotifyClient, SpotifyTemplateDataTransformer>(
                 "Spotify", configuration, serviceCollection);
 
             return serviceCollection.BuildServiceProvider();
@@ -47,9 +47,10 @@ namespace BandPageGenerator
                 .AddFilter("System.Net.Http.HttpClient", LogLevel.Error));
         }
 
-        private static void AddProviderServices<TConfig, TClient, TTemplateDataTransformer>
+        private static void AddProviderServices<TConfig, IClient, TClient, TTemplateDataTransformer>
             (string key, IConfigurationRoot configuration, IServiceCollection collection)
-            where TConfig : class where TClient : class where TTemplateDataTransformer : class, ITemplateDataTransformer
+            where TConfig : class where TClient : class, IClient where TTemplateDataTransformer : class, ITemplateDataTransformer
+            where IClient : class
         {
             var section = configuration.GetChildren().FirstOrDefault(s => s.Key == key);
 
@@ -59,7 +60,7 @@ namespace BandPageGenerator
             }
 
             collection.Configure<TConfig>(section);
-            collection.AddSingleton<TClient>();
+            collection.AddSingleton<IClient, TClient>();
             collection.AddSingleton<ITemplateDataTransformer, TTemplateDataTransformer>();
         }
 

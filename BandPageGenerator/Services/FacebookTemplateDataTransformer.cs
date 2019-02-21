@@ -11,11 +11,11 @@ namespace BandPageGenerator.Services
 {
     public class FacebookTemplateDataTransformer : AbstractTemplateDataTransformer
     {
-        private readonly FacebookClient client;
+        private readonly IFacebookClient client;
         private readonly FacebookConfig config;
 
         public FacebookTemplateDataTransformer(
-            FacebookClient client, IOptions<FacebookConfig> config, IDownloaderClient downloader,
+            IFacebookClient client, IOptions<FacebookConfig> config, IDownloaderClient downloader,
             IOptions<GeneralConfig> generalConfig) : base(downloader, generalConfig)
         {
             this.client = client;

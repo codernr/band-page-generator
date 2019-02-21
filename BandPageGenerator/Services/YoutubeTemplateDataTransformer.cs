@@ -10,9 +10,9 @@ namespace BandPageGenerator.Services
 {
     public class YoutubeTemplateDataTransformer : AbstractTemplateDataTransformer
     {
-        private readonly YoutubeClient client;
+        private readonly IYoutubeClient client;
 
-        public YoutubeTemplateDataTransformer(YoutubeClient client, IDownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
+        public YoutubeTemplateDataTransformer(IYoutubeClient client, IDownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
             : base(downloader, generalConfig) => this.client = client;
 
         public override async Task AddTemplateDataAsync(Dictionary<string, object> templateData)

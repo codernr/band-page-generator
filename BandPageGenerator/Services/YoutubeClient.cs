@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
 {
-    public class YoutubeClient
+    public class YoutubeClient : IYoutubeClient
     {
         private readonly YoutubeConfig config;
         private readonly IFormattedHttpClient client;

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BandPageGenerator.Services
 {
-    public class FacebookClient
+    public class FacebookClient : IFacebookClient
     {
         private readonly FacebookConfig config;
         private readonly IFormattedHttpClient client;

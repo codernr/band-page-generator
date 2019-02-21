@@ -11,12 +11,12 @@ namespace BandPageGenerator.Services
 {
     public class SpotifyTemplateDataTransformer : AbstractTemplateDataTransformer
     {
-        private readonly SpotifyClient client;
+        private readonly ISpotifyClient client;
 
         private readonly SpotifyConfig config;
 
         public SpotifyTemplateDataTransformer(
-            SpotifyClient client, IOptions<SpotifyConfig> config, IDownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
+            ISpotifyClient client, IOptions<SpotifyConfig> config, IDownloaderClient downloader, IOptions<GeneralConfig> generalConfig)
             : base(downloader, generalConfig)
         {
             this.client = client;
