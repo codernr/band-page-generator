@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Tests
+namespace Tests.Services
 {
     public class SpotifyClientTest
     {
