@@ -140,6 +140,23 @@ namespace Tests.Services
             Assert.Contains("#hashtag2", response[0].Caption);
         }
 
+        [Fact]
+        public static async Task ShouldReturnProfilePictureString()
+        {
+            var client = CreateClient(new FacebookDataModel<FacebookProfilePictureModel>
+            {
+                Data = new FacebookProfilePictureModel { Url = "http://example.com/example.jpg" }
+            });
+
+            var options = CreateOptions(new FacebookConfig());
+
+            var facebookClient = new FacebookClient(options.Object, client.Object, LoggerMock);
+
+            var response = await facebookClient.GetProfilePictureAsync();
+
+            Assert.Equal("http://example.com/example.jpg", response);
+        }
+
         private static Mock<IJsonHttpClient<SnakeCaseNamingStrategy>> CreateClient<TModel>(TModel returnValue)
         {
             var client = new Mock<IJsonHttpClient<SnakeCaseNamingStrategy>>();
