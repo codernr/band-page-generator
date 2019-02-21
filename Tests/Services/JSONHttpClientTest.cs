@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Tests.Services
 {
-    public class JSONHttpClientTest
+    public class JsonHttpClientTest
     {
         [Fact]
         public async static Task GetShouldReturnModel()
