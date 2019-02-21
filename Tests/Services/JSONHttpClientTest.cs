@@ -19,6 +19,28 @@ namespace Tests.Services
             var client = new JsonHttpClient<CamelCaseNamingStrategy>(GetClient("{\"id\": 1, \"name\": \"hello\"}"));
 
             var response = await client.GetAsync<TestModel>("http://example.com/any/url");
+            
+            Assert.Equal(1, response.Id);
+            Assert.Equal("hello", response.Name);
+        }
+
+        [Fact]
+        public async static Task GetWithHeadersShouldReturnModel()
+        {
+            var client = new JsonHttpClient<CamelCaseNamingStrategy>(GetClient("{\"id\": 1, \"name\": \"hello\"}"));
+
+            var response = await client.GetAsync<TestModel>("http://example.com/any/url", new[] { ("Authorization", "Bearer asdf") });
+            
+            Assert.Equal(1, response.Id);
+            Assert.Equal("hello", response.Name);
+        }
+
+        [Fact]
+        public async static Task PostShouldReturnModel()
+        {
+            var client = new JsonHttpClient<CamelCaseNamingStrategy>(GetClient("{\"id\": 1, \"name\": \"hello\"}"));
+
+            var response = await client.PostAsync<TestModel>("http://example.com/any/url", new StringContent("any content"), new[] { ("Authorization", "Bearer asdf") });
 
             Assert.Equal(1, response.Id);
             Assert.Equal("hello", response.Name);
