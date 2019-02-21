@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -17,11 +18,13 @@ namespace BandPageGenerator.Services
 
         private readonly HttpClient client;
         private readonly ILogger<DownloaderClient> logger;
+        private readonly IFileSystem fileSystem;
 
-        public DownloaderClient(HttpClient client, ILogger<DownloaderClient> logger)
+        public DownloaderClient(HttpClient client, ILogger<DownloaderClient> logger, IFileSystem fileSystem)
         {
             this.client = client;
             this.logger = logger;
+            this.fileSystem = fileSystem;
         }
 
         public Task<string> DownloadFile(string requestUri, string id, string savePath, string basePath)
@@ -43,12 +46,12 @@ namespace BandPageGenerator.Services
 
                 var fileName = $"{id}.{acceptedTypes[contentType]}";
 
-                Directory.CreateDirectory(savePath);
+                this.fileSystem.Directory.CreateDirectory(savePath);
 
-                var filePath = Path.Combine(savePath, fileName);
-                var returnPath = Path.Combine(basePath, fileName);
+                var filePath = this.fileSystem.Path.Combine(savePath, fileName);
+                var returnPath = this.fileSystem.Path.Combine(basePath, fileName);
 
-                if (File.Exists(filePath) && !forceDownload)
+                if (this.fileSystem.File.Exists(filePath) && !forceDownload)
                 {
                     this.logger.LogWarning("The file {0} already exists, it is not saved again.", filePath);
                     return returnPath;
@@ -59,7 +62,7 @@ namespace BandPageGenerator.Services
                 var request = await this.client.GetAsync(requestUri);
 
                 using (var contentStream = await request.Content.ReadAsStreamAsync())
-                using (var fileStream = File.Create(filePath))
+                using (var fileStream = this.fileSystem.File.Create(filePath))
                 {
                     await contentStream.CopyToAsync(fileStream);
                 }

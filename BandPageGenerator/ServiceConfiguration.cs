@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 
 namespace BandPageGenerator
@@ -16,7 +17,8 @@ namespace BandPageGenerator
         public static IServiceProvider ConfigureServiceProvider(string settings, string downloadSavePath)
         {
             var serviceCollection = new ServiceCollection()
-                .AddSingleton<IViewRenderer, HandlebarsViewRenderer>();
+                .AddSingleton<IViewRenderer, HandlebarsViewRenderer>()
+                .AddSingleton<IFileSystem, FileSystem>();
 
             ConfigureLogging(serviceCollection);
 
