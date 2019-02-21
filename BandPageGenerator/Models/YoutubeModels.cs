@@ -97,15 +97,17 @@ namespace BandPageGenerator.Models
     /// </summary>
     public class YoutubeVideoModel
     {
-        public string Id { get; }
+        public string Id { get; set; }
 
-        public DateTime PublishedAt { get; }
+        public DateTime PublishedAt { get; set; }
 
-        public string Title { get; }
+        public string Title { get; set; }
 
-        public string Description { get; }
+        public string Description { get; set; }
 
-        public YoutubeThumbnailModel Thumbnail { get; }
+        public YoutubeThumbnailModel Thumbnail { get; set; }
+
+        public YoutubeVideoModel() { }
 
         public YoutubeVideoModel(YoutubeSnippetModel snippet)
         {
