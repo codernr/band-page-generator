@@ -1,0 +1,84 @@
+﻿using BandPageGenerator.Config;
+using BandPageGenerator.Models;
+using BandPageGenerator.Services;
+using BandPageGenerator.Services.Interfaces;
+using Microsoft.Extensions.Options;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace Tests.Services
+{
+    public class SpotifyTemplateDataTransformerTest
+    {
+        [Fact]
+        public async static Task ShouldAddTemplateDataKeys()
+        {
+            var clientMock = new Mock<ISpotifyClient>();
+            clientMock.Setup(c => c.GetAlbumsAsync())
+                .ReturnsAsync(new[]
+                {
+                    new SpotifyAlbumModel
+                    {
+                        AlbumType = "album",
+                        Id = "123",
+                        Label = "Label",
+                        Name = "AlbumName",
+                        Type = "Single",
+                        ReleaseDate = "2018",
+                        ReleaseDatePrecision = "year",
+                        Images = new[]
+                        {
+                            new SpotifyImageModel { Url = "http://example.com", Height = 10, Width = 20 }
+                        },
+                        Tracks = new SpotifyPagingModel<SpotifyTrackModel>
+                        {
+                            Items = new[]
+                            {
+                                new SpotifyTrackModel { DurationMs = 20000, Id = "track0", Name = "Track", TrackNumber = 1 }
+                            }
+                        }
+                    }
+                });
+
+            var downloaderMock = new Mock<IDownloaderClient>();
+            downloaderMock.Setup(d => d.DownloadFile("http://example.com", "123", It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync("woaaaa");
+
+            var optionsMock = new Mock<IOptions<GeneralConfig>>();
+            optionsMock.Setup(o => o.Value).Returns(new GeneralConfig());
+
+            var spotifyOptionsMock = new Mock<IOptions<SpotifyConfig>>();
+            spotifyOptionsMock.Setup(o => o.Value).Returns(new SpotifyConfig
+            {
+                AlternativeLinks = new[]
+                {
+                    new AlternativeLink { Title = "AlbumName", Links = new Dictionary<string, string>
+                    {
+                        { "bandcamp", "http://asdf.bandcamp.com" }
+                    }
+                    }
+                }
+            });
+
+            var transformer = new SpotifyTemplateDataTransformer(clientMock.Object, spotifyOptionsMock.Object, downloaderMock.Object, optionsMock.Object);
+
+            var data = new Dictionary<string, object>();
+
+            await transformer.AddTemplateDataAsync(data);
+
+            Assert.True(data.ContainsKey("Albums"));
+
+            var albums = (data["Albums"] as IEnumerable<SpotifyAlbumTemplateModel>).ToArray();
+
+            Assert.Equal("AlbumName", albums[0].Name = "AlbumName");
+            Assert.Equal(new DateTime(2018, 1, 1), albums[0].ReleaseDate);
+            Assert.Equal("woaaaa", albums[0].Image.Url);
+            Assert.Equal("http://asdf.bandcamp.com", albums[0].AlternativeLinks["bandcamp"]);
+        }
+    }
+}

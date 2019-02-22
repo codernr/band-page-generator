@@ -59,10 +59,10 @@ namespace BandPageGenerator.Services
             switch (releaseDatePrecision)
             {
                 case "year":
-                    return new DateTime(int.Parse(releaseDate), 0, 0);
+                    return new DateTime(int.Parse(releaseDate), 1, 1);
 
                 case "month":
-                    return new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), 0);
+                    return new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), 1);
 
                 case "day":
                     return new DateTime(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
