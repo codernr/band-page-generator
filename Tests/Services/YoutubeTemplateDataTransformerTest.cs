@@ -24,7 +24,10 @@ namespace Tests.Services
                 .ReturnsAsync(new[] { new YoutubeVideoModel
                 {
                     Id = "asdf",
-                    Thumbnail = new YoutubeThumbnailModel { Url = "http://example.com" }
+                    PublishedAt = new DateTime(2019, 02, 21),
+                    Title = "VideoTitle",
+                    Description = "VideoDescription",
+                    Thumbnail = new YoutubeThumbnailModel { Url = "http://example.com", Width = 100, Height = 50 }
                 } });
 
             var downloaderMock = new Mock<IDownloaderClient>();
@@ -40,8 +43,16 @@ namespace Tests.Services
 
             await client.AddTemplateDataAsync(templateData);
 
+            var video = (templateData["Videos"] as List<YoutubeVideoModel>)[0];
+
             Assert.Equal((long)12, templateData["ViewCount"]);
-            Assert.Equal("woaaaa", (templateData["Videos"] as List<YoutubeVideoModel>)[0].Thumbnail.Url);
+            Assert.Equal("asdf", video.Id);
+            Assert.Equal(new DateTime(2019, 02, 21), video.PublishedAt);
+            Assert.Equal("VideoTitle", video.Title);
+            Assert.Equal("VideoDescription", video.Description);
+            Assert.Equal(100, video.Thumbnail.Width);
+            Assert.Equal(50, video.Thumbnail.Height);
+            Assert.Equal("woaaaa", video.Thumbnail.Url);
         }
     }
 }
