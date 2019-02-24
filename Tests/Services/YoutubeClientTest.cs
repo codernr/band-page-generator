@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Tests.Services
 {
-    public class YoutubeClientTest
+    public static class YoutubeClientTest
     {
         private static ILogger<YoutubeClient> LoggerMock => Mock.Of<ILogger<YoutubeClient>>();
 

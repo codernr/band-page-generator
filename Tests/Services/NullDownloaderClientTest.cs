@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Tests.Services
 {
-    public class NullDownloaderClientTest
+    public static class NullDownloaderClientTest
     {
         [Fact]
         public static async Task ShouldReturnRequestUri()

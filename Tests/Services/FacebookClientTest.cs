@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Tests.Services
 {
-    public class FacebookClientTest
+    public static class FacebookClientTest
     {
         private static ILogger<FacebookClient> LoggerMock => Mock.Of<ILogger<FacebookClient>>();
 

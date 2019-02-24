@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Tests.Services
 {
-    public class SpotifyClientTest
+    public static class SpotifyClientTest
     {
         private static ILogger<SpotifyClient> LoggerMock => Mock.Of<ILogger<SpotifyClient>>();
 

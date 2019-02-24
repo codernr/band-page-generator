@@ -6,13 +6,12 @@ using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.Services
 {
-    public class YoutubeTemplateDataTransformerTest
+    public static class YoutubeTemplateDataTransformerTest
     {
         [Fact]
         public async static Task ShouldAddTemplateDataKeys()

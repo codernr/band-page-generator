@@ -7,13 +7,12 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests.Services
 {
-    public class SpotifyTemplateDataTransformerTest
+    public static class SpotifyTemplateDataTransformerTest
     {
         [Fact]
         public async static Task ShouldAddTemplateDataKeys()

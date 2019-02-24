@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Tests.Services
 {
-    public class DownloaderClientTest
+    public static class DownloaderClientTest
     {
         private static ILogger<DownloaderClient> LoggerMock => Mock.Of<ILogger<DownloaderClient>>();
 

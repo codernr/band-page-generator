@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Tests.Services
 {
-    public class FacebookTemplateDataTransformerTest
+    public static class FacebookTemplateDataTransformerTest
     {
         [Fact]
         public async static Task ShouldAddTemplateDataKeys()
