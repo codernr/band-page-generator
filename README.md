@@ -57,7 +57,7 @@ Example settings file can be found [here](https://github.com/codernr/band-page-g
 	* `ArtistId`: spotify artist ID
 	* `AlternativeLinks`: an array of titled album link collection to other providers (like bandcamp, itunes, etc.)
 	    * `Title`: the title of the album (albums are associated with the ones fetched from spotify API by title)
-		* `Links`: key-value pairs of provider and album link, example: `{ "bandcamp": "https://band.bandcamp.com/album/some-album" }
+		* `Links`: key-value pairs of provider and album link, example: `{ "bandcamp": "https://band.bandcamp.com/album/some-album" }`
 * `General`
     * `DownloadedBasePath`: used only if `-d` command line option is used, image paths are appended to this, so it has to contain the url where the page is going to be hosted; example: `https://myband.com/downloads`
 	
