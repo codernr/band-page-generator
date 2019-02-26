@@ -66,5 +66,46 @@ Example settings file can be found [here](https://github.com/codernr/band-page-g
 The app can be run from the folder where it is downloaded with the above example values like this:
 
 `dotnet BandPageGenerator.dll -o C:\BandPage\index.html -t C:\BandPage\Template -s C:\BandPage\settings.json -d C:\BandPage\downloads`
-		
-	
+
+## Getting API keys and tokens
+
+You will need different API keys and tokens to access your social data with this app. These can be acquired differently from each provider.
+
+### Facebook and Instagram
+
+_Note: figuring this process out was almost as much work as to write this entire software. How ironic that it is nearly impossible to use graph api to access PUBLIC data from your own page while all the facebook partners are gathering the users' private data haha._
+
+At the time of writing this, the Graph API is in v3.2 version. The only way to use it for accessing public data from your page is to create an API app and leave it in development mode.
+
+Other prerequisites to make it work:
+
+* you have to be the owner of the app
+* you have to be admin on the facebook page you want to access
+* your instagram account must be linked with your facebook page as a business account
+
+Steps to acquire a never expiring access token to your page:
+
+1. On [https://developers.facebook.com](https://developers.facebook.com) click on My apps, then Add new app
+2. Give your app a name and create it
+3. In Products + section of the dashboard, add Marketing API (click Set Up)
+4. Go back to Products and add Instagram too
+5. Go to Marketing API > Tools
+6. In Get Access Token section check all the checkboxes and click "Get Token"
+7. Copy the given token
+8. Go to [Graph API Explorer](https://developers.facebook.com/tools/explorer/)
+9. On the right select your Facebook App
+10. Under permission type "instagram_basic" in the "Add a Permission" field
+11. Click Get Access Token button on the bottom
+12. Accept the popup
+13. Above the Get token button paste the previously (7th step) copied token
+14. Select your band's facebook page from the User or Page dropdown
+15. Go back to Access Token field (where you pasted the previous token) and save its content, this is your final token
+16. Check it on [Access Token Debugger](https://developers.facebook.com/tools/debug/accesstoken)
+
+You should see something like this:
+
+* type: Page
+* Page ID: your band page ID and name
+* Expires: Never
+
+This token has to be set in the `Facebook > AccessToken` settings.
