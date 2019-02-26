@@ -109,3 +109,19 @@ You should see something like this:
 * Expires: Never
 
 This token has to be set in the `Facebook > AccessToken` settings.
+
+### Youtube
+
+1. Go to [Google Developer Console](https://console.developers.google.com/) and sign in with your google account
+2. Click on top left dropdown, then click create a project
+3. Give it a name and create it
+4. Go to Library on the left menu
+5. Search for Youtube Data API v3
+6. Select it and click on Enable
+7. Go to Credentials on the left menu
+8. Click + Create credential
+9. For the *Where will you be calling the API from?* question select Other non-UI
+10. From the radio buttons select public data
+11. Click the button, save the key that is presented
+
+This key should be pasted in the settings at `Youtube > ApiKey` section 
