@@ -211,6 +211,36 @@ _Has all the properties of FacebookPhotoModel, plus:_
 
 #### YoutubeVideoModel
 
+* `Id`
+* `Title`: Title of the video
+* `PublishedAt`: DateTime of publication, can be displayed with [date helper](#template-helpers)
+* `Description`
+* `Thumbnail`: thumbnail picture
+  * `Url`: URL of the thumbnail image
+  * `Width`
+  * `Height`
+
 #### SpotifyAlbumTemplateModel
+
+* `Id`
+* `AlbumType`: The type of the album: one of "album" , "single" , or "compilation"
+* `Label`: Publishing label
+* `Name`: Title of the album
+* `ReleaseDate`: DateTime of the release, can be displayed with [date helper](#template-helpers)
+* `Type`: "album"
+* `Image`: Cover of the album
+  * `Url`
+  * `Width`
+  * `Height`
+* `Tracks`: list of tracks on the album, array of [SpotifyTrackModel](#spotifytrackmodel)
+* `AlternativeLinks`: list of links on other streaming platforms, defined in in [settings](#settings-json-file)
+
+#### SpotifyTrackModel
+
+* `Id`
+* `Name`: Title of the track
+* `TrackNumber`: The number of the track on the album
+* `DurationMs`: Duration in milliseconds
+* `Duration`: Duration in TimeSpan, can be displayed with [interval helper](#template-helpers)
 
 ### Template helpers
