@@ -136,3 +136,36 @@ This key should be set in the `Youtube > ApiKey` settings
 6. Check all the checkboxes and continue
 7. Copy your client ID to settings JSON: `Spotify > ClientId`
 8. Click 'Show client secret' and copy the value to settings JSON: `Spotify > ClientSecret`
+
+## Templating
+
+In the provided template index.html one can use Handlebars syntax to display gathered data from provider APIs. For full reference of the syntax, visit [https://handlebarsjs.com/](https://handlebarsjs.com/)
+
+An example template is included in this project, you can browse it [here](https://github.com/codernr/band-page-generator/blob/develop/BandPageGenerator/Templates/index.html)
+
+### Template model hierarchy
+
+#### Main template object
+
+* `Likes`: Facebook page like count
+* `ProfilePictureUrl`: Url of facebook page profile picture
+* `UpcomingEvents`: Page events in the future, array of [FacebookEventModel](#facebook-event-model)
+* `PastEvents`: Past page events limited by `PastEventDisplayLimit` count, array of [FacebookEventModel](#facebookeventmodel)
+* `FeaturedPhotos`: Featured facebook photo album (specified by album ID in facebook [settings](#settings-json-file)), array of [FacebookPhotoModel](#facebookphotomodel)
+* `MemberPhotos`: Member facebook photo album (_note that captions of member photos on facebook have to have a line break in them, the first line is member name, the last is description_), array of [FacebookMemberPhotoModel](#facebookmemberphotomodel)
+* `InstagramPhotos`: Recent instagram photos, array of [FacebookInstagramMediaModel](#facebookinstagrammediamodel)
+* `ViewCount`: Cumulated view count of all videos of the band on Youtube
+* `Videos`: Videos of featured playlist on Youtube (specified by `FeaturedPlaylistId` in [settings](#settings-json-file)), array of [YoutubeVideoModel](#youtubevideomodel)
+* `Albums`: Albums of band on Spotify, array of [SpotifyAlbumTemplateModel](#spotifyalbumtemplatemodel)
+
+#### FacebookEventModel
+
+#### FacebookPhotoModel
+
+#### FacebookMemberPhotoModel
+
+#### FacebookInstagramMediaModel
+
+#### YoutubeVideoModel
+
+#### SpotifyAlbumTemplateModel
