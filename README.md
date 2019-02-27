@@ -262,3 +262,37 @@ Formats a TimeSpan object based on standard [.NET TimeSpan format string](https:
 Example usage: `{{interval Albums.0.Tracks.0.Duration '\:mm\:ss'}}`
 
 Output: `05:23`
+
+## Host on GitLab pages
+
+You can host your own page for free on [GitLab](https://gitlab.com) and set it up to be automatically refreshed, pulling new data from social sites. I've set up a skeleton project, you can make your own page in a few steps:
+
+1. Register a user on GitLab: [https://gitlab.com/users/sign_in#register-pane](https://gitlab.com/users/sign_in#register-pane)  
+Carefully choose your username, because your page address is going to be username.gitlab.io
+2. Confirm your email address and log in
+3. Go to the prototype project page: [https://gitlab.com/codernr/band-page-generator-auto-prototype](https://gitlab.com/codernr/band-page-generator-auto-prototype)
+4. Click 'Fork' on the top right, now you have your own version of the project
+5. Go to Settings > General menu
+6. Under 'Permissions' **set your project visibility to private**. This is important, because you will store sensitive API keys in your settings.json
+7. Under 'Advanced', click 'Remove fork relationship' button
+8. Under 'Advanced > Rename repository', set your project path from `band-page-generator-auto-prototype` to `your-username.gitlab.io`
+9. Go to 'Repository > Files' in the menu
+10. Open `settings.json` and edit it as described in [settings documentation](#settings-json-file)
+11. Open `public/index.html` and edit your template HTML as you wish
+
+After each modification a CI page publish pipeline runs that you can see in the menu CI/CD. After a while, your page will be available under `https://your-username.gitlab.io`
+
+### Periodically update your page
+
+The point in this project is that you have to create your page template once and it gets updated with new data from your social accounts. If you have a new event on your facebook, new picture on your instagram or new release on spotify, it should appear on your page automatically without touching it.
+
+To achieve this, you can set a schedule to run the generation periodically:
+
+1. Go to CI/CD > Schedules
+2. Click on New Schedule
+3. Name it
+4. Set Interval Pattern to Every day (4:00am)
+5. Set your timezone
+6. Click Save pipeline schedule
+
+Now this generation pipeline will run every day at 4:00am, so your social updates will appear on your site next day!
