@@ -149,7 +149,7 @@ An example template is included in this project, you can browse it [here](https:
 
 * `Likes`: Facebook page like count
 * `ProfilePictureUrl`: Url of facebook page profile picture
-* `UpcomingEvents`: Page events in the future, array of [FacebookEventModel](#facebook-event-model)
+* `UpcomingEvents`: Page events in the future, array of [FacebookEventModel](#facebookeventmodel)
 * `PastEvents`: Past page events limited by `PastEventDisplayLimit` count, array of [FacebookEventModel](#facebookeventmodel)
 * `FeaturedPhotos`: Featured facebook photo album (specified by album ID in facebook [settings](#settings-json-file)), array of [FacebookPhotoModel](#facebookphotomodel)
 * `MemberPhotos`: Member facebook photo album (_note that captions of member photos on facebook have to have a line break in them, the first line is member name, the last is description_), array of [FacebookMemberPhotoModel](#facebookmemberphotomodel)
@@ -188,9 +188,26 @@ An example template is included in this project, you can browse it [here](https:
 
 #### FacebookPhotoModel
 
+* `Id`
+* `Height`
+* `Width`
+* `Source`: URL of the picture
+
 #### FacebookMemberPhotoModel
 
+_Has all the properties of FacebookPhotoModel, plus:_
+
+* `Name`: Name of the member, first line of the facebook photo caption
+* `Description`: Description of the member, second line of the facebook photo caption
+
 #### FacebookInstagramMediaModel
+
+* `Id`
+* `MediaType`: String representation of type, always `IMAGE`
+* `MediaUrl`: URL of the picture
+* `Caption`: Instagram caption of the picture
+* `Permalink`: URL of the origin instagram post
+* `Timestamp`: DateTime of the upload, can be displayed with [date helper](#template-helpers)
 
 #### YoutubeVideoModel
 
