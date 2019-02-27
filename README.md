@@ -124,4 +124,15 @@ This token has to be set in the `Facebook > AccessToken` settings.
 10. From the radio buttons select public data
 11. Click the button, save the key that is presented
 
-This key should be pasted in the settings at `Youtube > ApiKey` section 
+This key should be set in the `Youtube > ApiKey` settings
+
+### Spotify
+
+1. Go to [Spotify developer dashboard](https://developer.spotify.com/dashboard/)
+2. Log in to Spotify
+3. Click create client id
+4. Fill in the form, select Desktop app checkbox
+5. Click 'No' on the next page (_Are you developing a commercial integration?_)
+6. Check all the checkboxes and continue
+7. Copy your client ID to settings JSON: `Spotify > ClientId`
+8. Click 'Show client secret' and copy the value to settings JSON: `Spotify > ClientSecret`
