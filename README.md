@@ -160,6 +160,32 @@ An example template is included in this project, you can browse it [here](https:
 
 #### FacebookEventModel
 
+* `Id`: Id of the event
+* `Category`: Category of the event
+* `Name`: Name of the event
+* `Description`: Raw text description of the event
+* `FormattedDescription`: Description of the event formatted with HTML line breaks and links
+* `StartTime`: DateTime of event start, can be displayed with [date helper](#template-helpers)
+* `EndTime`: DateTime of event end, can be displayed with [date helper](#template-helpers)
+* `TicketUri`: URL of ticket purchase link
+* `Cover`: The event cover picture
+  * `Id`: Cover photo ID
+  * `OffsetX`: Offset X of facebook display on event page
+  * `OffsetY`: Offset Y of facebook display on event page
+  * `Source`: URL of the picture
+* `Place`: Place object of the event location
+  * `Id`: Place ID
+  * `Name`: Place name
+  * `Location`: Geographical location of place
+    * `Name`
+    * `City`
+    * `Country`
+    * `State`
+    * `Street`
+    * `Zip`
+    * `Latitude`
+    * `Longitude`
+
 #### FacebookPhotoModel
 
 #### FacebookMemberPhotoModel
@@ -169,3 +195,5 @@ An example template is included in this project, you can browse it [here](https:
 #### YoutubeVideoModel
 
 #### SpotifyAlbumTemplateModel
+
+### Template helpers
