@@ -32,6 +32,8 @@ You can see a working example here: [https://sz4p.hu](https://sz4p.hu)
     * [SpotifyAlbumTemplateModel](#spotifyalbumtemplatemodel)
     * [SpotifyTrackModel](#spotifytrackmodel)
   * [Template helpers](#template-helpers)
+    * [Date helper](#date-helper)
+    * [Interval helper](#interval-helper)
 * [Host on GitLab pages](#host-on-gitlab-pages)
   * [Periodically update your page](#periodically-update-your-page)
 
