@@ -165,8 +165,8 @@ An example template is included in this project, you can browse it [here](https:
 * `Name`: Name of the event
 * `Description`: Raw text description of the event
 * `FormattedDescription`: Description of the event formatted with HTML line breaks and links
-* `StartTime`: DateTime of event start, can be displayed with [date helper](#template-helpers)
-* `EndTime`: DateTime of event end, can be displayed with [date helper](#template-helpers)
+* `StartTime`: DateTime of event start, can be displayed with [date helper](#date-helper)
+* `EndTime`: DateTime of event end, can be displayed with [date helper](#date-helper)
 * `TicketUri`: URL of ticket purchase link
 * `Cover`: The event cover picture
   * `Id`: Cover photo ID
@@ -207,13 +207,13 @@ _Has all the properties of FacebookPhotoModel, plus:_
 * `MediaUrl`: URL of the picture
 * `Caption`: Instagram caption of the picture
 * `Permalink`: URL of the origin instagram post
-* `Timestamp`: DateTime of the upload, can be displayed with [date helper](#template-helpers)
+* `Timestamp`: DateTime of the upload, can be displayed with [date helper](#date-helper)
 
 #### YoutubeVideoModel
 
 * `Id`
 * `Title`: Title of the video
-* `PublishedAt`: DateTime of publication, can be displayed with [date helper](#template-helpers)
+* `PublishedAt`: DateTime of publication, can be displayed with [date helper](#date-helper)
 * `Description`
 * `Thumbnail`: thumbnail picture
   * `Url`: URL of the thumbnail image
@@ -226,7 +226,7 @@ _Has all the properties of FacebookPhotoModel, plus:_
 * `AlbumType`: The type of the album: one of "album" , "single" , or "compilation"
 * `Label`: Publishing label
 * `Name`: Title of the album
-* `ReleaseDate`: DateTime of the release, can be displayed with [date helper](#template-helpers)
+* `ReleaseDate`: DateTime of the release, can be displayed with [date helper](#date-helper)
 * `Type`: "album"
 * `Image`: Cover of the album
   * `Url`
@@ -241,6 +241,24 @@ _Has all the properties of FacebookPhotoModel, plus:_
 * `Name`: Title of the track
 * `TrackNumber`: The number of the track on the album
 * `DurationMs`: Duration in milliseconds
-* `Duration`: Duration in TimeSpan, can be displayed with [interval helper](#template-helpers)
+* `Duration`: Duration in TimeSpan, can be displayed with [interval helper](#interval-helper)
 
 ### Template helpers
+
+Built in [Handlebars helpers](https://handlebarsjs.com/block_helpers.html) for displaying certain types of data
+
+#### Date helper
+
+Formats a DateTime object based on standard [.NET DateTime format string](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings)
+
+Example usage: `{{date UpcomingEvents.0.StartTime 'yyyy. MM. dd. HH:mm'}}`
+
+Output: `2019. 12. 24. 20:00`
+
+#### Interval helper
+
+Formats a TimeSpan object based on standard [.NET TimeSpan format string](https://docs.microsoft.com/en-us/dotnet/standard/base-types/custom-timespan-format-strings)
+
+Example usage: `{{interval Albums.0.Tracks.0.Duration '\:mm\:ss'}}`
+
+Output: `05:23`
