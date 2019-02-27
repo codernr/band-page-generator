@@ -10,6 +10,31 @@ This project however doesn't intend to eliminate the work that must be done on t
 
 You can see a working example here: [https://sz4p.hu](https://sz4p.hu)
 
+## Contents
+
+* [Installation](#installation)
+* [Usage](#usage)
+  * [Command line options](#command-line-options)
+  * [Settings JSON file](#settings-json-file)
+  * [How to run](#how-to-run)
+* [Getting API keys and tokens](#getting-api-keys-and-tokens)
+  * [Facebook and Instagram](#facebook-and-instagram)
+  * [Youtube](#youtube)
+  * [Spotify](#spotify)
+* [Templating](#templating)
+  * [Template model hierarchy](#template-model-hierarchy)
+    * [Main template object](#main-template-object)
+    * [FacebookEventModel](#facebookeventmodel)
+    * [FacebookPhotoModel](#facebookphotomodel)
+    * [FacebookMemberPhotoModel](#facebookmemberphotomodel)
+    * [FacebookInstagramMediaModel](#facebookinstagrammediamodel)
+    * [YoutubeVideoModel](#youtubevideomodel)
+    * [SpotifyAlbumTemplateModel](#spotifyalbumtemplatemodel)
+    * [SpotifyTrackModel](#spotifytrackmodel)
+  * [Template helpers](#template-helpers)
+* [Host on GitLab pages](#host-on-gitlab-pages)
+  * [Periodically update your page](#periodically-update-your-page)
+
 ## Installation
 
 You can download the [latest release](https://github.com/codernr/band-page-generator/releases/latest) from the releases page of this repository.
@@ -44,16 +69,16 @@ Example settings file can be found [here](https://github.com/codernr/band-page-g
 	example: `["#hashtag1", "#hashtag2]`
 	* `AlbumId`: facebook graph id of a facebook photo album that is displayed on the page
 	* `ApiVersion`: facebook graph api version to use (use `v3.2` as it is the most recent when writing this)
-	* `AccessToken`: API access token to make requests to facebook API (documented in Wiki... TODO)
+	* `AccessToken`: API access token to make requests to facebook API [see below](#facebook-and-instagram)
 	* `PastEventDisplayLimit`: How many past events you want to display on the page
 * `Youtube`
-    * `ApiKey`: key to access Youtube data API (documeted in Wiki... TODO)
+    * `ApiKey`: key to access Youtube data API [see below](#youtube)
 	* `ChannelId`: Id of the band's youtube channel
 	* `AdditionalVideoIds`: an array of videos that are not published on the band's channel but is a band video (added to cumulated view count of the channel)
 	* `FeaturedPlaylistId`: A youtube playlist from which videos are fetched to be played on the page
 * `Spotify`
-    * `ClientId`: spotify API client ID (documeted in Wiki... TODO)
-	* `ClientSecret`: spotify API client secret (documeted in Wiki... TODO)
+    * `ClientId`: spotify API client ID [see below](#spotify)
+	* `ClientSecret`: spotify API client secret [see below](#spotify)
 	* `ArtistId`: spotify artist ID
 	* `AlternativeLinks`: an array of titled album link collection to other providers (like bandcamp, itunes, etc.)
 	    * `Title`: the title of the album (albums are associated with the ones fetched from spotify API by title)
@@ -104,7 +129,7 @@ Steps to acquire a never expiring access token to your page:
 
 You should see something like this:
 
-* type: Page
+* Type: Page
 * Page ID: your band page ID and name
 * Expires: Never
 
@@ -280,7 +305,7 @@ Carefully choose your username, because your page address is going to be usernam
 10. Open `settings.json` and edit it as described in [settings documentation](#settings-json-file)
 11. Open `public/index.html` and edit your template HTML as you wish
 
-After each modification a CI page publish pipeline runs that you can see in the menu CI/CD. After a while, your page will be available under `https://your-username.gitlab.io`
+After each modification a CI page publish pipeline runs that you can see in the menu CI/CD. After a while (sometimes can take an hour), your page will be available under `https://your-username.gitlab.io`
 
 ### Periodically update your page
 
