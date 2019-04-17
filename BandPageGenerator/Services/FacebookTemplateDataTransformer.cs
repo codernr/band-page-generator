@@ -34,8 +34,8 @@ namespace BandPageGenerator.Services
                 profilePictureUri, "profile", this.generalConfig.DownloadSavePath, this.generalConfig.DownloadedBasePath, true));
 
             var events = await this.client.GetPageEventsAsync();
-            var upcomingEvents = events.Where(e => e.StartTime > DateTime.Now);
-            var pastEvents = events.Where(e => e.StartTime < DateTime.Now).Take(this.config.PastEventDisplayLimit);
+            var upcomingEvents = events.Where(e => e.StartTime > DateTime.Now).OrderBy(e => e.StartTime);
+            var pastEvents = events.Where(e => e.StartTime < DateTime.Now).Take(this.config.PastEventDisplayLimit).OrderByDescending(e => e.StartTime);
 
             templateData.Add("UpcomingEvents", await this.Replace(upcomingEvents, e => e.Cover.Source, e => e.Cover.Id));
             templateData.Add("PastEvents", await this.Replace(pastEvents, e => e.Cover.Source, e => e.Cover.Id));
