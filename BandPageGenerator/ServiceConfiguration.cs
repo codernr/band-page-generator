@@ -4,7 +4,6 @@ using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.IO;
 using System.IO.Abstractions;
@@ -22,8 +21,7 @@ namespace BandPageGenerator
 
             ConfigureLogging(serviceCollection);
 
-            serviceCollection.AddHttpClient<IJsonHttpClient<SnakeCaseNamingStrategy>, JsonHttpClient<SnakeCaseNamingStrategy>>();
-            serviceCollection.AddHttpClient<IJsonHttpClient<CamelCaseNamingStrategy>, JsonHttpClient<CamelCaseNamingStrategy>>();
+            serviceCollection.AddHttpClient();
 
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), settings), false)
