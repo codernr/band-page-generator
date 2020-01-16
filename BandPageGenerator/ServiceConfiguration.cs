@@ -17,7 +17,8 @@ namespace BandPageGenerator
         {
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IViewRenderer, HandlebarsViewRenderer>()
-                .AddSingleton<IFileSystem, FileSystem>();
+                .AddSingleton<IFileSystem, FileSystem>()
+                .AddSingleton<IJsonHttpClientFactory, JsonHttpClientFactory>();
 
             ConfigureLogging(serviceCollection);
 
