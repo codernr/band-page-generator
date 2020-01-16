@@ -41,7 +41,7 @@ You can see a working example here: [https://sz4p.hu](https://sz4p.hu)
 
 You can download the [latest release](https://github.com/codernr/band-page-generator/releases/latest) from the releases page of this repository.
 
-The project is built with dotnet core 2.2 so it needs dotnet runtime to be run. [You can download it here](https://dotnet.microsoft.com/download)
+The project is built with dotnet core 3.1 so it needs dotnet runtime to be run. [You can download it here](https://dotnet.microsoft.com/download)
 
 Optionally, the app can be published to any platform as a standalone by dotnet SDK if you clone the repository.
 
