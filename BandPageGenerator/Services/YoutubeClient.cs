@@ -3,7 +3,6 @@ using BandPageGenerator.Models;
 using BandPageGenerator.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,11 +17,11 @@ namespace BandPageGenerator.Services
 
         public YoutubeClient(
             IOptions<YoutubeConfig> config,
-            IJsonHttpClient<CamelCaseNamingStrategy> client,
+            JsonHttpClientFactory clientFactory,
             ILogger<YoutubeClient> logger)
         {
             this.config = config.Value;
-            this.client = client;
+            this.client = clientFactory.CreateClient(JsonHttpClientFactory.NamingPolicy.CamelCase);
             this.logger = logger;
         }
 
