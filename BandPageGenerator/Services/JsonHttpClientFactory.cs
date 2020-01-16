@@ -1,24 +1,21 @@
 using System;
 using System.Net.Http;
 using System.Text.Json;
+using BandPageGenerator.Services.Interfaces;
 
 namespace BandPageGenerator.Services
 {
-    public class JsonHttpClientFactory
+    public class JsonHttpClientFactory : IJsonHttpClientFactory
     {
-        public enum NamingPolicy
-        {
-            CamelCase
-        }
-
         private readonly HttpClient httpClient;
+
         public JsonHttpClientFactory(HttpClient httpClient) => this.httpClient = httpClient;
         
-        public JsonHttpClient CreateClient(NamingPolicy namingPolicy)
+        public JsonHttpClient CreateClient(ClientNamingPolicy namingPolicy)
         {
             JsonNamingPolicy policy = namingPolicy switch
             {
-                NamingPolicy.CamelCase => JsonNamingPolicy.CamelCase,
+                ClientNamingPolicy.CamelCase => JsonNamingPolicy.CamelCase,
                 _ => throw new ArgumentException("Invalid enum type")
             };
 

@@ -17,11 +17,11 @@ namespace BandPageGenerator.Services
 
         public YoutubeClient(
             IOptions<YoutubeConfig> config,
-            JsonHttpClientFactory clientFactory,
+            IJsonHttpClientFactory clientFactory,
             ILogger<YoutubeClient> logger)
         {
             this.config = config.Value;
-            this.client = clientFactory.CreateClient(JsonHttpClientFactory.NamingPolicy.CamelCase);
+            this.client = clientFactory.CreateClient(ClientNamingPolicy.CamelCase);
             this.logger = logger;
         }
 
