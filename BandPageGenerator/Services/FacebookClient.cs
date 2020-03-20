@@ -67,7 +67,7 @@ namespace BandPageGenerator.Services
 
             if (this.config.FilterHashtags != null && this.config.FilterHashtags.Length > 0)
             {
-                images = images.Where(i => this.config.FilterHashtags.Any(filter => i.Caption.Contains(filter)));
+                images = images.Where(i => i.Caption != null && this.config.FilterHashtags.Any(filter => i.Caption.Contains(filter)));
             }
 
             return images.ToArray();
